@@ -8,12 +8,14 @@
 
 前一個 project 以 `AGENTS.md` 作為唯一真相來源，`CLAUDE.md` 只寫 `@AGENTS.md`，各平台共用同一份措辭。實際使用後發現，不同 model 對同一句指令的反應不同，但這個架構沒有地方可以針對個別 model 調整措辭，只能整份一起改。
 
-本 project 要管的 surface 共 6 個，涵蓋兩個 vendor：
+本 project 要管的 surface 共 7 個，涵蓋兩個 vendor：
 
-| | chat | agentic（global） | agentic（repo） |
-|---|---|---|---|
-| Claude | claude.ai preferences | Claude Code | Claude Code |
-| OpenAI | ChatGPT Custom Instructions | Codex | Codex |
+| | chat | agentic（global） | agentic（repo） | agentic（cloud） |
+|---|---|---|---|---|
+| Claude | claude.ai preferences | Claude Code | Claude Code | — |
+| OpenAI | ChatGPT Custom Instructions | Codex | Codex | Codex cloud |
+
+Codex cloud 原本假設會讀 repo 的 `AGENTS.md`，因此併在 `codex-repo` 底下。[S2](../spikes/S2-result.md) 實測後推翻了這個假設：一般 cloud 任務的 cwd 不在 repo 內，不會載入 repo 的 `AGENTS.md`；ChatGPT Custom Instructions 也傾向不套用。所以 Codex cloud 拆成獨立的 surface，而且目前**沒有可以部署 instruction 的管道**。
 
 各 surface 在載入方式、長度限制和內容需求上都不一樣。例如 chat 不需要 git 相關規則，而 chat 類 surface 有字數上限。
 
@@ -28,6 +30,8 @@
    - 已實作：`implemented` 或 `experimental`
    - 明確不實作：`not-needed`
 
+   例外：`surfaces.yaml` 標為 `channel: none` 的 surface（目前只有 `codex-cloud`）沒有載入管道，不列入這項完整性檢查。
+
    不允許「未提及」。lint 負責檢查這項完整性。
 4. **平台的切分單位是 surface，不是 vendor。**
 
@@ -40,7 +44,7 @@
 - 部署檔就是最終的檔案，所見即所得。
 
 **負面**
-- 同一個 intent 會在多份檔案裡用不同措辭重複出現。修改一個 intent 時，可能要同步改最多 6 份檔案。
+- 同一個 intent 會在多份檔案裡用不同措辭重複出現。修改一個 intent 時，可能要同步改最多 6 份檔案（`codex-cloud` 沒有部署檔）。
 - 「什麼該算成一個 intent」需要判斷。切得太細，管理成本會上升；切得太粗，rationale 就失去精確性。
 
 ## 替代方案

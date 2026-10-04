@@ -42,11 +42,11 @@
 | 2 | Rationale 資料模型 **[ADR]** | ✅ | `rationale/<surface>.yaml` 逐字引用規則原文，lint 雙向比對；`not-needed` 需 evidence；`evidence: none` 只能是 `experimental` |
 | 7 | Skills 是否進 v1 | ✅ | 不管理本體；`depends_on` + `pinned` hash；更新流程含 `check-deps`；skill 化是升級路徑 |
 | 3 | Eval 範圍與成本上限 **[ADR]** | ✅ | eval 只把關 status 標籤，不擋部署；單位 intent×surface；leave-one-out；硬上限 18 次（自動）/ 4 次（手動） |
-| 5 | 目錄佈局與 surface 對應 | ✅ | 6 個 surface ID；`surfaces.yaml` 部署目標為清單；repo 根 `CLAUDE.md`/`AGENTS.md` 為實體檔 |
+| 5 | 目錄佈局與 surface 對應 | ✅ | 7 個 surface ID（S2 後新增 `codex-cloud`，`channel: none`）；`surfaces.yaml` 部署目標為清單；repo 根 `CLAUDE.md`/`AGENTS.md` 為實體檔 |
 | 6 | 部署機制 **[ADR]** | ✅ | copy ＋ drift 偵測 ＋ 首次備份；手動 surface 以 `--confirm` 記錄 |
 | 4 | Eval 執行機制 | ✅ | 隔離＋同層注入（否則標 proxy）；assertion 優先、LLM judge 限二元題；case/run 格式固定 |
-| S1 | Eval 隔離可行性 | 🔬 | 見待 spike |
-| S2 | Codex cloud 讀取來源 | 🔬 | 見待 spike |
+| S1 | Eval 隔離可行性 | ✅ 2026-10-05 | 4 組皆 `native`；Codex 需同時隔離 `HOME`；model 需明確指定；以引用判定載入（[S1-result](../spikes/S1-result.md)） |
+| S2 | Codex cloud 讀取來源 | ✅ 2026-10-05 | 一般任務不載入 repo `AGENTS.md`；Custom Instructions 傾向不套用 → 新增 `codex-cloud`（[S2-result](../spikes/S2-result.md)） |
 
 ---
 
@@ -130,6 +130,7 @@
   - **已安裝 vs pinned**：若不一致，依賴它的規則標為 `stale`。
   - 另外：未安裝的 skill 會使依賴它的規則不能是 `implemented`；跨 surface 版本不一致時列出差異。
   - CLI surface 由 script 計算 hash；claude.ai 產出手動核對清單。
+  - Codex 的 skill 路徑：`$CODEX_HOME/skills/<name>/` 與 `~/.agents/skills/<name>/`，格式與 Claude Code 的 `SKILL.md` 相容（[C8](../spikes/codex-verification-result.md#c8-skills)）。
 - skill 是升級路徑：某 intent 在某 surface 以規則文字實作，evidence 顯示仍失敗，且失敗原因是「規則過長或只在特定任務需要」時，才針對該 surface 開啟 skill 化討論。
 
 **理由**
@@ -209,8 +210,9 @@ scripts/
 docs/decisions/
 ```
 
-- surface ID：`claude-ai`、`claude-code-global`、`claude-code-repo`、`chatgpt`、`codex-global`、`codex-repo`。
-- Codex cloud 暫時併入 `codex-repo`，待 S2 驗證。
+- surface ID：`claude-ai`、`claude-code-global`、`claude-code-repo`、`chatgpt`、`codex-global`、`codex-repo`、`codex-cloud`。
+- `codex-cloud`：依 S2 結果獨立成 surface，標 `channel: none`。目前沒有可部署的管道，不建部署檔，也不列入 intent 完整性檢查。重新評估的條件：第一次用 Codex cloud 跑本 repo 時，補測 S2 的未解項目。只要其中一項找到可載入 instruction 的管道，就把 `channel` 改成該管道，並開始建立部署檔。
+- 已回寫的查核值：`chatgpt` 上限 5,000 字元（Plus 方案）；`codex-repo` 上限 32,768 bytes（project 層合計，超過會被靜默截斷）；`codex-global` 無上限；`codex-global` 在 Codex CLI 與 app 的 local project 生效，不適用於 Codex cloud。
 - repo 根目錄的 `CLAUDE.md`、`AGENTS.md` 為實體檔，不用 symlink（Claude Code 的 Edit 工具拒絕透過 symlink 寫入）。
 - 字數上限記在 `surfaces.yaml`；查不到上限者填 `unknown`，lint 只警告、不失敗。
 - 部署目標使用清單格式，保留日後拆分到 `~/.claude/rules/` 的空間。
@@ -226,7 +228,7 @@ docs/decisions/
 - 本題由 #1～#3 收斂為唯一可行方向，沒有實質的替代方案。
 
 **推翻條件**
-- S2 結果顯示 Codex cloud 讀取其他來源：新增 surface。
+- S2 的未解項目找到 Codex cloud 的載入管道：把 `codex-cloud` 從 `channel: none` 改為該管道。
 - Claude Code 的預設 Project instructions 行為改變。
 - Codex 支援 import 機制。
 
@@ -264,7 +266,7 @@ docs/decisions/
 - eval 一律在暫存 workspace 執行，不得讀寫真實的 `~/.claude`、`~/.codex`。
 - 部署檔以和該 surface 相同的層級注入。
 - 無法同層注入時，run 紀錄標 `injection: proxy`；proxy evidence 要升級為 `implemented`，需另附至少 1 次手動測試佐證。
-- 具體做法待 S1 決定。
+- 具體做法已依 S1 結果寫入 [ADR-0003 §6](0003-eval-gates-status-not-deploy.md)。
 
 **4b 判定方式**
 - 優先使用 assertion（script 讀 output，exit 0/1）。
@@ -313,21 +315,21 @@ check:
 - repo 自用 `CLAUDE.md`、`AGENTS.md` 的內容，以及各條規則的實際措辭。
 - intent 的優先序（決定 `stale` 補驗的順序）。
 
-## 待 spike
+## Spike（已完成）
 
 | ID | 問題 | 最小驗證動作 | 時間盒／截止 | 結果 → 選項 |
 |---|---|---|---|---|
 | S1 | eval 能否隔離且同層注入 | 在暫存目錄放入帶 canary（`CANARY-42`）的部署檔，分別以 `claude -p`、`codex exec` 搭配候選隔離方式（Claude：`--setting-sources` 或 `CLAUDE_CONFIG_DIR`；Codex：`CODEX_HOME`，皆未查證）各跑一次；確認 output 出現 canary，且真實 `~` 底下無檔案被讀寫 | 1 小時；實作 eval runner 前完成 | 同層成功 → `native`；只能 proxy → 標 `proxy`，`implemented` 需加手動佐證；無法隔離 → 該 surface 只走手動測試 |
 | S2 | Codex cloud 讀哪些 instruction | 在本 repo `AGENTS.md` 放 canary，從 Codex cloud 送出任務 | 30 分鐘；Codex cloud 首次部署前完成 | 有讀到且無其他來源 → 併入 `codex-repo`；否則新增 surface |
 
-兩者都需要你的帳號登入，由你在本機執行。
+兩者已於 2026-10-05 完成，結果見上方決策帳本。S2 留下的未解項目列在 [S2-result](../spikes/S2-result.md)，在第一次用 Codex cloud 跑本 repo 時補測。
 
 ## 遷移（已確認，2026-10-04）
 
 **v1 完成的定義**
 - `lint`、`deploy`、`status`、`check-deps` 可運作。
 - S1 已完成。
-- 6 個 surface 都有部署檔，且每個 intent 在每個 surface 都有狀態（`implemented`、`not-needed` 或 `experimental` 其中之一）。
+- 6 個有載入管道的 surface 都有部署檔（`codex-cloud` 為 `channel: none`，除外），且每個 intent 在每個 surface 都有狀態（`implemented`、`not-needed` 或 `experimental` 其中之一）。
 
 **遷移步驟**
 1. 達成上述定義後，才把現行的 claude.ai preferences 與 Claude Code／Codex global 檔遷入本 repo。
@@ -339,8 +341,9 @@ check:
 
 ## 仍存在的風險與假設
 
-- **Codex 行為未經官方文件確認**：Codex 讀取檔案的規則、沒有 import 機制，都來自二手資料（官方網域被本環境的 proxy 擋住）。實作 `codex-global` 部署前，需要在本機查證官方文件。
-- **字數上限未確認**：claude.ai preferences 沒有官方上限數字。ChatGPT 的 5,000 字元來自二手報導（2026-07-15 調高）。
+- **Codex 文件與原始碼不一致**：Codex 的載入規則已於 2026-10-04 依官方文件與原始碼完成查核（[C1～C13](../spikes/codex-verification-result.md)）。但 C4 的截斷行為，文件和原始碼的描述不同，目前以原始碼為準。Codex 升級後，C1、C3、C4、C8 需要重查。
+- **claude.ai preferences 字數上限未確認**：沒有官方數字，`surfaces.yaml` 填 `unknown`。
+- **Codex cloud 沒有 instruction 管道**：`codex-cloud` 目前無法部署任何規則，在 Codex cloud 上的任務不受本 repo 規範約束。
 - **LLM judge 的偏差**：只能降低，無法消除。依賴 #4 的推翻條件抽查。
 - **leave-one-out 的限制**：假設規則之間大致獨立。若兩條規則互相補強，單獨移除一條可能低估它的貢獻。
 - **手動 surface 的 evidence 較弱**：1 次對 1 次的比較統計意義低，所以標為 `strength: manual`，和自動 evidence 分開解讀。
