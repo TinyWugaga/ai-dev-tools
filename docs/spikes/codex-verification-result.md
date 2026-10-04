@@ -45,6 +45,7 @@
 **來源**：[Doc-AGENTS]、[Help-CLI]。
 **S1 隔離漏洞**：user 層 skill 除了 `$CODEX_HOME/skills`，也會讀 `~/.agents/skills`。後者用的是 `dirs::home_dir()`，不受 `CODEX_HOME` 影響（[Src] `codex-rs/ext/skills/src/host_roots.rs`）。
 **對應動作**：S1 Codex 端採用 Method A。若 `~/.agents/skills` 存在，eval 會讀到真實 skill 的 metadata。需要完全隔離時，eval runner 要連 `HOME` 一起指到暫存目錄。
+**實測**：這個漏洞在 S1 實測中重現；同時隔離 `HOME` 後就不再發生，見 [S1-result.md](S1-result.md) 附註 2。
 
 ### C3 project 層探索
 
