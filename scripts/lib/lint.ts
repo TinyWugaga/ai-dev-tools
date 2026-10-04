@@ -76,7 +76,7 @@ function readYaml<T>(root: string, path: string, result: LintResult): T | undefi
   }
 }
 
-function measure(content: string, unit: Limit["unit"]): number {
+export function measure(content: string, unit: Limit["unit"]): number {
   if (unit === "chars") return [...content].length;
   if (unit === "bytes") return Buffer.byteLength(content, "utf8");
   if (unit === "lines") return content === "" ? 0 : content.replace(/\n$/, "").split("\n").length;

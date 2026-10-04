@@ -22,11 +22,17 @@
 
 ```sh
 npm install
-npm run lint   # 檢查 intent、rationale 與部署檔是否一致，以及長度是否超過上限
-npm test       # lint 本身的測試
+npm run lint                      # 檢查 intent、rationale 與部署檔是否一致，以及長度是否超過上限
+npm run status                    # 各 surface 的部署狀態與環境警告；有 drift 時 exit 1
+npm run deploy -- <surface-id>    # copy：部署到 ~；manual：印出要貼上的全文
+npm run deploy -- <surface-id> --confirm     # manual：貼上後記錄
+npm run deploy -- <surface-id> --pull        # drift：把外部修改拉回 repo
+npm run deploy -- <surface-id> --overwrite   # drift：捨棄外部修改（會先備份）
+npm run check-deps [-- --apply]   # skill 已安裝 vs upstream / pinned；--apply 把受影響紀錄改成 stale
+npm test
 ```
 
-`deploy`、`status`、`check-deps` 尚未實作。
+部署紀錄存放在 `~/.local/state/ai-dev-tools/state.json`（有設定 `XDG_STATE_HOME` 時改放在它底下，也可以用 `AI_DEV_TOOLS_STATE` 指定）。
 
 ## 注意事項
 

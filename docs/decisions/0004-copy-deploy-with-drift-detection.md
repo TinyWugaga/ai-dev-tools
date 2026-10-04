@@ -60,7 +60,19 @@
 - **`codex-repo` 的大小**：同一路徑上所有 project 層 `AGENTS.md` 的總和超過 `project_doc_max_bytes`（預設 32,768 bytes）時，Codex 會把最後一個檔案截斷，而且不會提示。`status` 要檢查 bytes 數，接近上限時發出警告（[C4](../spikes/codex-verification-result.md#c4-大小上限)）。`codex-global` 沒有上限。
 - **repo 根目錄的 `CLAUDE.md` 與 `AGENTS.md`**：兩者都是實體檔，不需要 deploy。repo 的 `CLAUDE.md` 和 README 要註明「不要使用 `claude-md-and-agents-md` 設定」。原因：Claude Code 在預設設定下，只要有 `CLAUDE.md` 就不會讀 `AGENTS.md`；改用這個設定後，會同時讀入給 Codex 用的 `AGENTS.md`。
 
-### 6. 預留拆分空間
+### 6. 實作補充（v1，`scripts/lib/deploy.ts`）
+
+以下保護措施不在原始決策中，是實作時補上的：
+
+- **lint 有錯誤時拒絕部署**：避免把 rationale 不一致的內容送出去。
+- **部署檔為空時拒絕部署**：避免用空檔覆蓋現有的 global 設定。
+- **部署檔有未 commit 的變更時拒絕部署**（manual 的 `--confirm` 也一樣）：落實「每次部署都對應到一個 git revision」。
+- **目標檔是 symlink 時拒絕部署**：copy 會穿過 symlink，改到它指向的檔案。
+- **`--overwrite` 覆蓋 drift 前也先備份**，不只限於首次部署。
+- **state 存放位置**：`$XDG_STATE_HOME/ai-dev-tools/state.json`，未設定時預設為 `~/.local/state/ai-dev-tools/state.json`，也可以用 `AI_DEV_TOOLS_STATE` 指定。
+- **`--pull` 之後**：state 會記錄拉回的內容，drift 因此解除。但 repo 會留下未 commit 的變更；必須補好 rationale 並 commit 之後，才能再次部署。
+
+### 7. 預留拆分空間
 
 `surfaces.yaml` 中部署目標的格式是清單（`files: [...]`），預留日後把 `claude-code-global` 拆到 `~/.claude/rules/` 的空間。滿足以下任一條件時拆分：
 - `claude-code-global` 超過 200 行。這是官方建議的單檔上限。

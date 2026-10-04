@@ -23,7 +23,7 @@
   |---|---|
   | 措辭改動（ADR-0002 的 lint 偵測到） | `experimental` |
   | 該 surface 的 model 更換 | `stale` |
-  | `check-deps` 發現依賴的 skill 內容與 `pinned` 不符 | `stale` |
+  | `check-deps` 發現依賴的 skill 內容與 `pinned` 不符 | `stale`（由 `check-deps --apply` 寫入，不加 `--apply` 時只回報） |
   | 依賴的 skill 在該 surface 未安裝 | 不得為 `implemented` |
 
 ### 2. 單位與對照
