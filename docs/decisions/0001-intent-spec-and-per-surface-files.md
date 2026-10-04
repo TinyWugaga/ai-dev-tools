@@ -45,7 +45,7 @@
 
 ## 替代方案
 
-- **共用 core 加平台 overlay**：core 仍然是跨 model 共用措辭，等於把問題縮小，但沒有消除。Codex 可能沒有 import 機制（尚未查證），這樣就需要 build 步驟。另外，每條規則都要判斷該放 core 還是 overlay。否決。
+- **共用 core 加平台 overlay**：core 仍然是跨 model 共用措辭，等於把問題縮小，但沒有消除。Codex 沒有 import 機制（[查核 C5](../spikes/codex-verification-result.md#c5-import--include)，查閱於 2026-10-04），因此需要 build 步驟。另外，每條規則都要判斷該放 core 還是 overlay。否決。
 - **各 surface 完全獨立，沒有 intent 清單**：意圖漂移無法偵測。在一人維護的情況下，改了一份忘了另一份是可預期的失誤。否決。
 
 ## 推翻條件

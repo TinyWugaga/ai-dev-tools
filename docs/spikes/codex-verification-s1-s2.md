@@ -129,7 +129,7 @@ claude -p --no-session-persistence --output-format json \
 
 ### Codex
 
-C-3 中尖括號標記的 flag 是佔位符。請依 C10 的查核結果，或 `codex exec --help` 的輸出，替換成實際的參數。
+flag 已依 C10 查核結果（codex-cli 0.153.4）填入。注意 `~/.agents/skills` 不受 `CODEX_HOME` 隔離，見 [C2](codex-verification-result.md#c2-codex_home)。
 
 **X-1 認證**
 
@@ -148,7 +148,7 @@ Begin every response with the exact line: CANARY-S1-CODEX-GLOBAL
 EOF
 cd "$S1/codex-cwd" && git init -q
 
-CODEX_HOME="$S1/codex-home" codex exec <SKIP_GIT_CHECK_FLAG?> <OUTPUT_FLAG> "$S1/codex-global.txt" \
+CODEX_HOME="$S1/codex-home" codex exec -s read-only --ephemeral -o "$S1/codex-global.txt" \
   "Quote verbatim the first line of every AGENTS.md you were given, with its path if known. Then say hi."
 ```
 
@@ -161,7 +161,7 @@ cat > AGENTS.md <<'EOF'
 Begin every response with the exact line: CANARY-S1-CODEX-REPO
 EOF
 
-CODEX_HOME="$S1/codex-home-empty" codex exec <OUTPUT_FLAG> "$S1/codex-repo.txt" \
+CODEX_HOME="$S1/codex-home-empty" codex exec -s read-only --ephemeral -o "$S1/codex-repo.txt" \
   "Quote verbatim the first line of every AGENTS.md you were given, with its path if known. Then say hi."
 ```
 

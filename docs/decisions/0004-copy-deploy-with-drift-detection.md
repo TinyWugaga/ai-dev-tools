@@ -15,7 +15,7 @@
 
 除了本 repo，還有其他來源會直接寫入自動目標：
 
-- Codex app 的 Custom instructions UI 會寫入 `~/.codex/AGENTS.md`。這點目前只有二手資料，未經查證。
+- Codex app 的 Custom instructions UI 會寫入 `~/.codex/AGENTS.md`（2026-10-05 實測，見[查核 C7](../spikes/codex-verification-result.md#c7-codex-app-custom-instructions-的寫入位置)）。
 - Claude Code 可能被要求「記住」某件事，因而寫入 `~/.claude/CLAUDE.md`。
 
 已查證的事實（[code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)，查閱於 2026-10-04）：在 Cowork session 中，如果 `~/.claude/CLAUDE.md` 本身是 symlink，Claude Code 會略過它，而且不會提示。
@@ -55,6 +55,7 @@
 ### 5. 附帶檢查
 
 - **`~/.claude/rules/`**：如果裡面有不是本 repo 管理的檔案，列出警告。依官方文件，user rule 與其他規則衝突時，Claude 可能任選一條遵守。
+- **`~/.codex/AGENTS.override.md`**：如果這個檔案存在且非空，就發出警告。Codex 在 global 層只會取第一個非空檔，並且優先讀 override，所以部署的 `AGENTS.md` 會整份失效（[查核 C1](../spikes/codex-verification-result.md#c1-global-檔載入規則)，查閱於 2026-10-04）。
 - **repo 根目錄的 `CLAUDE.md` 與 `AGENTS.md`**：兩者都是實體檔，不需要 deploy。repo 的 `CLAUDE.md` 和 README 要註明「不要使用 `claude-md-and-agents-md` 設定」。原因：Claude Code 在預設設定下，只要有 `CLAUDE.md` 就不會讀 `AGENTS.md`；改用這個設定後，會同時讀入給 Codex 用的 `AGENTS.md`。
 
 ### 6. 預留拆分空間
