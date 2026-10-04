@@ -24,7 +24,10 @@ Codex cloud 原本假設會讀 repo 的 `AGENTS.md`，因此併在 `codex-repo` 
 1. **`intents.yaml` 是平台中立的意圖清單，不部署。** 每個 intent 包含：
    - `id`
    - `goal`：要 model 做到什麼
-   - `applies_to`：`chat` 和／或 `agentic`
+   - `kinds`：`chat` 和／或 `agentic`
+   - `scopes`：`global` 和／或 `repo`
+
+   surface 的 `kind` 與 `scope` 同時落在 intent 的 `kinds` 與 `scopes` 內，這個 intent 就適用於該 surface。原本只有 `applies_to`（chat／agentic）一個維度，建 v1 骨架時發現「只適用於本 repo 維護」的 intent 不該套用到 global surface，所以補上 `scopes`。
 2. **每個 surface 有一份完整、手寫的部署檔。** 措辭針對該 surface 的 model 與 harness 調整。不使用 build、concat 或 import 來組合內容。
 3. **intent 與 surface 的每一種組合都必須有明確狀態**，記錄在 rationale 中（見 ADR-0002）：
    - 已實作：`implemented` 或 `experimental`

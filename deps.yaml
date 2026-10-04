@@ -1,0 +1,15 @@
+# 規則依賴的 skill（ADR-0002 depends_on、grill #7）。skill 本體不在本 repo 管理。
+# upstream：skill 原始碼位置（repo URL 或本機路徑），check-deps 用來比對已安裝版本。
+# install_paths：各 surface 的安裝位置，{name} 會被替換成 skill 名稱。
+
+upstream: null
+
+install_paths:
+  claude-code-global:
+    - ~/.claude/skills/{name}
+  codex-global:
+    - $CODEX_HOME/skills/{name}
+    - ~/.agents/skills/{name}
+  claude-ai: manual
+
+skills: []

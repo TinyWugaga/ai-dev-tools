@@ -1,0 +1,94 @@
+# surface 清單（ADR-0001、ADR-0004）。
+# channel：copy（deploy 複製到 targets）| manual（手動貼上）| in-repo（repo 內實體檔，不需 deploy）| none（無載入管道）
+# model：日常使用的 model，eval runner 以此指定 model（ADR-0003 §6）。未填時 lint 會警告。
+# limit.unit：chars | bytes | lines | unknown | none；enforce：error（預設）| warn
+
+- id: claude-ai
+  kind: chat
+  scope: global
+  channel: manual
+  files: [surfaces/claude-ai/preferences.md]
+  model: null
+  limit:
+    value: null
+    unit: unknown
+    source: 無官方數字
+    checked: 2026-10-04
+
+- id: claude-code-global
+  kind: agentic
+  scope: global
+  channel: copy
+  files: [surfaces/claude-code/CLAUDE.md]
+  targets: [~/.claude/CLAUDE.md]
+  model: null
+  limit:
+    value: 200
+    unit: lines
+    enforce: warn
+    source: https://code.claude.com/docs/en/memory （官方建議值，非硬上限）
+    checked: 2026-10-04
+  notes: 超過 200 行，或出現只適用於特定檔案類型的 intent 時，拆分到 ~/.claude/rules/（ADR-0004 §6）。
+
+- id: claude-code-repo
+  kind: agentic
+  scope: repo
+  channel: in-repo
+  files: [CLAUDE.md]
+  model: null
+  limit:
+    value: 200
+    unit: lines
+    enforce: warn
+    source: https://code.claude.com/docs/en/memory （官方建議值，非硬上限）
+    checked: 2026-10-04
+
+- id: chatgpt
+  kind: chat
+  scope: global
+  channel: manual
+  files: [surfaces/chatgpt/custom-instructions.md]
+  model: null
+  limit:
+    value: 5000
+    unit: chars
+    source: https://help.openai.com/en/articles/8096356-chatgpt-custom-instructions （Plus 方案）
+    checked: 2026-10-05
+  notes: 傾向不套用到 Codex cloud 任務（docs/spikes/S2-result.md）。
+
+- id: codex-global
+  kind: agentic
+  scope: global
+  channel: copy
+  files: [surfaces/codex/AGENTS.md]
+  targets: [~/.codex/AGENTS.md]
+  model: null
+  limit:
+    value: null
+    unit: none
+    source: docs/spikes/codex-verification-result.md#c4-大小上限 （原始碼未見 global 上限）
+    checked: 2026-10-04
+  notes: >-
+    在 Codex CLI 與 app 的 local project 生效，不適用於 Codex cloud（C6）。
+    非空的 ~/.codex/AGENTS.override.md 會讓本檔整份失效（C1）。
+    Codex app 的 Personalization 會直接改寫本檔（C7）。
+
+- id: codex-repo
+  kind: agentic
+  scope: repo
+  channel: in-repo
+  files: [AGENTS.md]
+  model: null
+  limit:
+    value: 32768
+    unit: bytes
+    source: docs/spikes/codex-verification-result.md#c4-大小上限 （project_doc_max_bytes 預設值；超過時最後一個檔會被靜默截斷）
+    checked: 2026-10-04
+
+- id: codex-cloud
+  kind: agentic
+  scope: repo
+  channel: none
+  notes: >-
+    一般 cloud 任務的 cwd 不在 repo 內，不會載入 repo 的 AGENTS.md；Custom Instructions 傾向不套用（S2）。
+    第一次用 Codex cloud 跑本 repo 時補測 S2 未解項目，找到載入管道就改 channel。

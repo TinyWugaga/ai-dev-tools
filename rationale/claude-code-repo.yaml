@@ -1,0 +1,49 @@
+# rationale：CLAUDE.md（ADR-0002）
+- intent: repo.orientation
+  status: experimental
+  text: 修改前先讀 `docs/decisions/` 中與任務相關的 ADR，以 ADR 作為設計依據。需求和 ADR 衝突時，先指出衝突點再動手。
+  observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+  model: null
+  checked: 2026-10-04
+  evidence: none
+  revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
+- intent: repo.rationale-sync
+  status: experimental
+  text: 修改 `surfaces/`、`CLAUDE.md` 或 `AGENTS.md` 中的規則文字時，在同一次變更內更新 `rationale/<surface-id>.yaml` 對應紀錄的 `text`，讓兩邊逐字相同，並把 `status` 設為 `experimental`。
+  observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+  model: null
+  checked: 2026-10-04
+  evidence: none
+  revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
+- intent: repo.no-home-writes
+  status: experimental
+  text: 不要直接寫入 `~/.claude`、`~/.codex`、`~/.agents`。global 檔只透過 deploy script 更新，而且由使用者自己執行。
+  observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+  model: null
+  checked: 2026-10-04
+  evidence: none
+  revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
+- intent: repo.file-separation
+  status: experimental
+  text: 本檔只給 Claude Code 讀，`AGENTS.md` 只給 Codex 讀。不要用 import、symlink 或複製讓兩者共用內容。
+  observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+  model: null
+  checked: 2026-10-04
+  evidence: none
+  revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
+- intent: repo.lint-before-done
+  status: experimental
+  text: 改動 `intents.yaml`、`surfaces.yaml`、`deps.yaml`、`rationale/` 或任何部署檔之後，執行 `npm run lint`。lint 失敗時不要回報完成。
+  observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+  model: null
+  checked: 2026-10-04
+  evidence: none
+  revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
+- intent: repo.volatile-facts
+  status: experimental
+  text: "`surfaces.yaml` 中的平台事實（長度上限、載入行為）必須附 `source` 與 `checked`。查不到就填 `unknown`，不要憑記憶填數值。"
+  observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+  model: null
+  checked: 2026-10-04
+  evidence: none
+  revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
