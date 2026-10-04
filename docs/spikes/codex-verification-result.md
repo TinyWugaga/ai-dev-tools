@@ -25,7 +25,7 @@
 | C6 | ✅ 已實測（2026-10-05） | 本機 local project chat、手機 ChatGPT app 遠端連線都生效；Codex cloud 不讀本機 global 檔 |
 | C7 | ✅ 已實測（2026-10-05） | UI 儲存會改寫 `~/.codex/AGENTS.md` |
 | C8 | ✅ 已查證 | 支援 `SKILL.md`，路徑見下 |
-| C9 | ⚠️ 部分 | Plus 方案 5,000 字元；是否套用 Codex cloud 未知，交給 S2 |
+| C9 | ✅ 已實測（S2） | Plus 方案 5,000 字元；傾向不套用到 Codex cloud 任務（中等強度證據） |
 | C10 | ✅ 已查證 | flag 見下 |
 | C11 | ✅ 已查證 | 可從 human output 標頭或 session 檔取得，但都是「設定的 model」 |
 | C12 | ✅ 靜態查證 | loader 不處理 HTML 註解，原文注入 |
@@ -121,6 +121,7 @@ CLI 端的 [Src] 會把 global 檔和 project 檔一起載入，兩者不互斥�
 **來源**：[Help-CI]。WebFetch 會被回 403，改用瀏覽器讀取。
 **回寫值**：`chatgpt` 的上限設為 5,000 字元（使用者為 Plus 方案，2026-10-05 確認）。
 **對應動作**：是否套用到 Codex cloud 由 S2 步驟 3 實測。C6 在 cloud 沒看到本機 global canary，但那次測的是本機檔案，不是 ChatGPT Custom Instructions，所以不能代替 S2 步驟 3。
+**S2 結果**：傾向不套用。cloud 任務沒有照做也沒有引用 `CANARY-S2-GLOBAL`，而同一個 model 會照做注入的 repo canary；詳見 [S2-result.md](S2-result.md)。
 
 ### C10 `codex exec` 非互動參數
 
@@ -167,4 +168,4 @@ CLI 端的 [Src] 會把 global 檔和 project 檔一起載入，兩者不互斥�
 |---|---|---|
 | C6 | 2026-10-05 | local project chat、手機 ChatGPT app 遠端連線都出現 canary；Codex cloud 未出現 |
 | C7 | 2026-10-05 | UI 儲存後檔案 hash 改變，復原後回到原值 |
-| C9 | 2026-10-05 | 方案為 Plus，上限 5,000 字元；是否套用 Codex cloud 留待 S2 步驟 3 |
+| C9 | 2026-10-05 | 方案為 Plus，上限 5,000 字元；S2 步驟 3 顯示傾向不套用到 Codex cloud，見 [S2-result.md](S2-result.md) |
