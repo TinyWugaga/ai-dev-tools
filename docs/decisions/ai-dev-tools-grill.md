@@ -1,7 +1,7 @@
 # ai-dev-tools 決策集（grill 收斂版）
 
 日期：2026-10-04
-性質：pre-ADR 決策集。標 **[ADR]** 的項目屬架構級，正式開工前各自展開成 ADR。
+性質：pre-ADR 決策集。標 **[ADR]** 的項目已展開為正式 ADR：[0001](0001-intent-spec-and-per-surface-files.md)、[0002](0002-rationale-records-quote-rule-text.md)、[0003](0003-eval-gates-status-not-deploy.md)、[0004](0004-copy-deploy-with-drift-detection.md)。
 
 ## 範圍與非目標
 
@@ -50,7 +50,7 @@
 
 ---
 
-## #1 分層模型 [ADR]
+## #1 分層模型 [ADR-0001]
 
 **結論**
 - `intents.yaml`：平台中立的意圖清單（ID、目標、`applies_to`），不部署。
@@ -73,7 +73,7 @@
 - intent 數量與 surface 數量使重複措辭的維護成本明顯超過收益（例如單一 intent 修改平均需要同步 4 個以上檔案，且反覆漏改）。
 - 出現必須跨平台逐字一致的規則類別：此時加入「intent 附 canonical 措辭＋lint 檢查逐字一致」的例外，不推翻整體。
 
-## #2 Rationale 資料模型 [ADR]
+## #2 Rationale 資料模型 [ADR-0002]
 
 **結論**
 - `rationale/<surface-id>.yaml`，每筆記錄如下：
@@ -144,7 +144,7 @@
 - 出現兩個以上 intent 符合上述升級條件。
 - Codex 與 Claude 的 skill 機制確認可共用同一套 trigger eval。
 
-## #3 Eval 範圍與成本上限 [ADR]
+## #3 Eval 範圍與成本上限 [ADR-0003]
 
 **結論**
 - eval 只把關 status 標籤，**永不阻擋部署**。
@@ -230,7 +230,7 @@ docs/decisions/
 - Claude Code 的預設 Project instructions 行為改變。
 - Codex 支援 import 機制。
 
-## #6 部署機制 [ADR]
+## #6 部署機制 [ADR-0004]
 
 **結論**
 - 自動 surface 使用 copy。
@@ -322,7 +322,7 @@ check:
 
 兩者都需要你的帳號登入，由你在本機執行。
 
-## 遷移（暫定，待確認）
+## 遷移（已確認，2026-10-04）
 
 **v1 完成的定義**
 - `lint`、`deploy`、`status`、`check-deps` 可運作。
