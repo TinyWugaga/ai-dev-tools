@@ -50,3 +50,18 @@
   checked: 2026-10-04
   evidence: none
   revisit_when: 第一次在本 repo 以此 surface 實際作業後，補記 observed
+- intent: repo.issue-sync
+  status: experimental
+  text: |-
+    - 以下兩種情況，執行 `npm run issue -- <decision|task> --key <key> --title "<標題>" --body-file <檔案>`，不需要先詢問，完成後在回覆中附上 issue 連結：
+      1. ADR 狀態成為 Accepted（包括新建時就是 Accepted）：kind 用 `decision`，key 用 `ADR-NNNN`，body 放 ADR 路徑與決策摘要。
+      2. 使用者核准一份具體 plan：kind 用 `task`，key 用 `task-<核准日 YYYY-MM-DD>-<slug>`，body 放 plan 摘要和 checklist。使用者直接要求執行、沒有核准 plan 時，不建立。
+    - body 連到當下已存在的對方 issue（task ↔ decision），不要為了等對方建立而延後。
+    - task key 在第一次核准時產生並寫進當輪回覆；同一天內 slug 不可重複。重跑時沿用同一個 key，不要依日期或標題重新產生。
+    - 這是常設授權，只涵蓋在 `TinyWugaga/ai-dev-tools` 建立 issue 並加入 Project 5。不要建立 label、編輯、關閉、reopen 或刪除 issue。
+    - 指令回傳非 0 時，回報 stdout 與 stderr，不要改用 `gh` 或其他方式建立。使用者排除原因後，可以重跑同一指令。
+  observed: "unobserved: 使用者要求的流程規則，2026-10-09 寫入"
+  model: null
+  checked: 2026-10-09
+  evidence: none
+  revisit_when: 第一次實際以此 surface 建立 decision 或 task issue 後，補記 observed

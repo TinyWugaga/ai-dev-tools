@@ -14,6 +14,7 @@
 | `CLAUDE.md`、`AGENTS.md` | 本 repo 自用的部署檔（surface：`claude-code-repo`、`codex-repo`） |
 | `rationale/<surface>.yaml` | 每條規則的逐字原文、狀態、觀察紀錄與 evidence |
 | `deps.yaml` | 規則依賴的 skill 與安裝路徑 |
+| `github.yaml` | `npm run issue` 的目標 repo、Project 與 label |
 | `docs/spikes/` | 查核與實驗紀錄 |
 
 ## 指令
@@ -29,6 +30,7 @@ npm run deploy -- <surface-id> --confirm     # manual：貼上後記錄
 npm run deploy -- <surface-id> --pull        # drift：把外部修改拉回 repo
 npm run deploy -- <surface-id> --overwrite   # drift：捨棄外部修改（會先備份）
 npm run check-deps [-- --apply]   # skill 已安裝 vs upstream / pinned；--apply 把受影響紀錄改成 stale
+npm run issue -- <decision|task> --key <key> --title <標題> --body-file <檔案>   # 建 issue 並加入 GitHub Project（ADR-0005）
 npm test
 ```
 
@@ -39,3 +41,4 @@ npm test
 - **不要把 Claude Code 的 Project instructions 設為 `claude-md-and-agents-md`。** 這個設定會讓 Claude 同時讀入給 Codex 用的 `AGENTS.md`。
 - **不要在 `~/.codex/config.toml` 的 `project_doc_fallback_filenames` 加入 `CLAUDE.md`。** 這會讓 Codex 讀入給 Claude 用的檔案。
 - **`~/.codex/AGENTS.override.md` 存在且非空時，部署的 `~/.codex/AGENTS.md` 會整份失效。**
+- **`npm run issue` 需要 `project` scope，label 也要先建好。** 執行 `gh auth refresh -s project` 補上 scope，並建立 `github.yaml` 中列出的 label（`decision`、`task`）。script 不會自動建立 label。

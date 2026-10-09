@@ -32,3 +32,8 @@
   goal: surfaces.yaml 中的平台事實必須附來源與查閱日期；查不到就標 unknown，不憑記憶填值。
   kinds: [agentic]
   scopes: [repo]
+
+- id: repo.issue-sync
+  goal: ADR 定案為 Accepted 或使用者核准具體 plan 後，以 npm run issue 建立 GitHub issue 並加入 Project，不需事先詢問、完成後回報連結；授權只涵蓋建立 issue 與加入 Project，失敗時回報、不改用其他方式。
+  kinds: [agentic]
+  scopes: [repo]
