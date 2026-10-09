@@ -324,3 +324,30 @@
   checked: 2026-10-09
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或下一次 claude.ai 預設 model 更換時
+- intent: cowork.default-folder
+  status: experimental
+  text: |-
+    [Imported from Cowork]:
+
+    - 由 Project Instruction 指定專案預設資料夾，除使用者明確告知不指定資料夾，未指定時需提醒使用者設定預設資料夾。
+  observed: "unobserved: 從 claude.ai preferences 的 Cowork 匯入段遷入，原始觀察未記錄"
+  model: null
+  checked: 2026-10-09
+  evidence: none
+  revisit_when: 補記此規則因應的 model 行為；或 Cowork 的專案資料夾機制改變時
+- intent: cowork.instructions-lookup
+  status: experimental
+  text: 專案規範以預設資料夾下的 `AGENTS.md` 內容為優先，如 `AGENTS.md` 未存在則讀取 `CLAUDE.md` 內容，兩者皆不存在時，除使用者明確告知不設定規範，需提醒使用者新增規範檔（僅有預設資料夾需提醒），如 CLAUDE.md 僅含匯入指令而無規則本文，視同規範未載入；不指定專案預設資料夾時，忽略此項目。
+  observed: "unobserved: 從 claude.ai preferences 的 Cowork 匯入段遷入，原始觀察未記錄"
+  model: null
+  checked: 2026-10-09
+  evidence: none
+  revisit_when: 補記此規則因應的 model 行為；或 Cowork 的專案資料夾機制改變時
+- intent: cowork.unreadable-folder-notice
+  status: experimental
+  text: 無法讀取預設資料夾下的檔案時需先告知使用者。
+  observed: "unobserved: 從 claude.ai preferences 的 Cowork 匯入段遷入，原始觀察未記錄"
+  model: null
+  checked: 2026-10-09
+  evidence: none
+  revisit_when: 補記此規則因應的 model 行為；或 Cowork 的專案資料夾機制改變時
