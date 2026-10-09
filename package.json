@@ -1,0 +1,19 @@
+{
+  "name": "ai-dev-tools",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "lint": "node scripts/lint.ts",
+    "test": "node --test 'scripts/**/*.test.ts'",
+    "deploy": "node scripts/deploy.ts",
+    "status": "node scripts/status.ts",
+    "check-deps": "node scripts/check-deps.ts",
+    "issue": "node scripts/issue.ts"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  }
+}

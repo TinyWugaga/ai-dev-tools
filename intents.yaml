@@ -1,0 +1,39 @@
+# 平台中立的意圖清單，不部署（ADR-0001）。
+# kinds：chat | agentic；scopes：global | repo。
+# 某 surface 的 kind 與 scope 同時落在 intent 的 kinds 與 scopes 內，該 intent 就適用於此 surface，
+# 必須在 rationale/<surface>.yaml 中有一筆紀錄。
+
+- id: repo.orientation
+  goal: 修改本 repo 前，先讀相關 ADR，並以 ADR 為設計依據；需求與 ADR 衝突時先提出，不自行取捨。
+  kinds: [agentic]
+  scopes: [repo]
+
+- id: repo.rationale-sync
+  goal: 修改部署檔中的規則文字時，在同一次變更內同步更新 rationale 的 text，並把該紀錄的 status 設為 experimental。
+  kinds: [agentic]
+  scopes: [repo]
+
+- id: repo.no-home-writes
+  goal: 不直接寫入 ~/.claude、~/.codex、~/.agents；global 檔只透過 deploy script 更新，並由使用者自行執行。
+  kinds: [agentic]
+  scopes: [repo]
+
+- id: repo.file-separation
+  goal: CLAUDE.md 只給 Claude Code、AGENTS.md 只給 Codex；兩者不以 import、symlink 或複製共用內容。
+  kinds: [agentic]
+  scopes: [repo]
+
+- id: repo.lint-before-done
+  goal: 改動 intents、surfaces、deps、rationale 或任何部署檔後執行 lint；lint 失敗時不回報完成。
+  kinds: [agentic]
+  scopes: [repo]
+
+- id: repo.volatile-facts
+  goal: surfaces.yaml 中的平台事實必須附來源與查閱日期；查不到就標 unknown，不憑記憶填值。
+  kinds: [agentic]
+  scopes: [repo]
+
+- id: repo.issue-sync
+  goal: ADR 定案為 Accepted 或使用者核准具體 plan 後，以 npm run issue 建立 GitHub issue 並加入 Project，不需事先詢問、完成後回報連結；授權只涵蓋建立 issue 與加入 Project，失敗時回報、不改用其他方式。
+  kinds: [agentic]
+  scopes: [repo]

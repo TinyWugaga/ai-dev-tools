@@ -1,0 +1,31 @@
+# ai-dev-tools（Codex 專用）
+
+## 開始前
+
+- 先讀 `docs/decisions/` 下與任務相關的 ADR。ADR 是設計依據；任務需求與 ADR 衝突時，停下來回報衝突點，不要自行選擇其中一方。
+
+## 修改規則時
+
+- 部署檔（`surfaces/**`、`CLAUDE.md`、`AGENTS.md`）中的規則文字被新增或修改時，在同一次變更內完成：
+  1. 更新 `rationale/<surface-id>.yaml` 中對應紀錄的 `text`，與部署檔逐字相同。
+  2. 把該紀錄的 `status` 設為 `experimental`。
+- `AGENTS.md` 只給 Codex 讀，`CLAUDE.md` 只給 Claude Code 讀。不要建立 symlink、不要複製內容到另一個檔案，也不要在 `project_doc_fallback_filenames` 加入 `CLAUDE.md`。
+- `surfaces.yaml` 中的平台事實（長度上限、載入行為）必須附 `source` 與 `checked`。沒有查到來源時填 `unknown`，不要從記憶填入數值。
+
+## 記錄決策與任務
+
+- 以下兩種情況，執行 `npm run issue -- <decision|task> --key <key> --title "<標題>" --body-file <檔案>`，不需要先詢問，完成後在回覆中附上 issue 連結：
+  1. ADR 狀態成為 Accepted（包括新建時就是 Accepted）：kind 用 `decision`，key 用 `ADR-NNNN`，body 放 ADR 路徑與決策摘要。
+  2. 使用者核准一份具體 plan：kind 用 `task`，key 用 `task-<核准日 YYYY-MM-DD>-<slug>`，body 放 plan 摘要和 checklist。使用者直接要求執行、沒有核准 plan 時，不建立。
+- body 連到當下已存在的對方 issue（task ↔ decision），不要為了等對方建立而延後。
+- task key 在第一次核准時產生並寫進當輪回覆；同一天內 slug 不可重複。重跑時沿用同一個 key，不要依日期或標題重新產生。
+- 這是常設授權，只涵蓋在 `TinyWugaga/ai-dev-tools` 建立 issue 並加入 Project 5。不要建立 label、編輯、關閉、reopen 或刪除 issue。
+- 指令回傳非 0 時，回報 stdout 與 stderr，不要改用 `gh` 或其他方式建立。使用者排除原因後，可以重跑同一指令。
+
+## 禁止事項
+
+- 不要寫入 `~/.claude`、`~/.codex`、`~/.agents` 底下的任何檔案。global 檔只能由使用者執行 deploy script 更新。
+
+## 完成前
+
+- 只要改動了 `intents.yaml`、`surfaces.yaml`、`deps.yaml`、`rationale/` 或任何部署檔，執行 `npm run lint`。指令回傳非 0 時，修正後重跑；仍失敗就回報錯誤內容，不要回報完成。

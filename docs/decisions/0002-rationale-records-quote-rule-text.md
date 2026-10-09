@@ -39,10 +39,15 @@
    - 每筆記錄的 `text` 必須逐字出現在對應的部署檔中。
    - 部署檔中的每個規則段落，都必須被某一筆記錄引用。
 
-   「規則段落」的切分方式（例如以清單項或段落為單位）在實作時決定。
+   「規則段落」的切分方式（v1 實作，`scripts/lib/blocks.ts`）：
+   - 每個清單項目，不論層級，都是一個段落，內容為去掉清單符號後的文字。
+   - 連續的非清單文字行是一個段落；code fence 整段算一個段落。
+   - 標題、分隔線、HTML 註解不算規則段落。
+   - 比對時，段落內容只要是某筆紀錄 `text` 的子字串就算被引用。所以一筆紀錄可以逐字引用「父項目加上子項目」整塊文字。
 
 3. 狀態約束：
-   - `not-needed` 必須填寫 `observed` 和 `evidence`，用來證明 model 在沒有這條規則時已經表現正確。
+   - `not-needed` 必須填寫 `observed` 和 `evidence`，用來證明 model 在沒有這條規則時已經表現正確。`not-needed` 的紀錄不可有 `text`。
+   - 還沒有任何觀察紀錄的規則，`observed` 以 `unobserved:` 開頭並寫明原因，`model` 可以留空。這種紀錄只能是 `experimental`。
    - `evidence: none` 時，`status` 只能是 `experimental`。
    - lint 輸出所有 `experimental` 和 `stale` 的記錄。
 

@@ -1,0 +1,8 @@
+# npm run issue 的同步目標（ADR-0005）。label 由使用者事先建立，script 不建立 label。
+repo: TinyWugaga/ai-dev-tools
+project:
+  owner: TinyWugaga
+  number: 5
+labels:
+  decision: decision
+  task: task

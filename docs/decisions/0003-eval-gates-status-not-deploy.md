@@ -23,7 +23,7 @@
   |---|---|
   | 措辭改動（ADR-0002 的 lint 偵測到） | `experimental` |
   | 該 surface 的 model 更換 | `stale` |
-  | `check-deps` 發現依賴的 skill 內容與 `pinned` 不符 | `stale` |
+  | `check-deps` 發現依賴的 skill 內容與 `pinned` 不符 | `stale`（由 `check-deps --apply` 寫入，不加 `--apply` 時只回報） |
   | 依賴的 skill 在該 surface 未安裝 | 不得為 `implemented` |
 
 ### 2. 單位與對照
@@ -62,7 +62,21 @@
 - eval 一律在暫存 workspace 中執行，不得讀寫真實的 `~/.claude` 和 `~/.codex`。
 - 部署檔必須以和該 surface 相同的層級注入，例如 global surface 就注入到 user 層。
 - 若無法同層注入，run 紀錄標記為 `injection: proxy`。proxy evidence 要升級成 `implemented`，必須另外附上至少 1 次手動測試佐證。
-- 具體的隔離方式由 spike S1 決定。
+- 隔離方式依 [S1 結果](../spikes/S1-result.md)（2026-10-05），四組全部判定為 `native`：
+
+  | 工具 | 層級 | 做法 |
+  |---|---|---|
+  | Claude Code | user | `CLAUDE_CONFIG_DIR=<tmp>`，部署檔放 `<tmp>/CLAUDE.md` |
+  | Claude Code | project | cwd 放 `CLAUDE.md`，加 `--setting-sources project`，`CLAUDE_CONFIG_DIR` 指向空的暫存目錄 |
+  | Codex | user | `CODEX_HOME=<tmp>`，部署檔放 `<tmp>/AGENTS.md` |
+  | Codex | project | 暫存 git repo 根目錄放 `AGENTS.md`，`CODEX_HOME` 指向空的暫存目錄 |
+
+- Codex 必須**同時**把 `HOME` 指到暫存目錄。原因：`~/.agents/skills` 不受 `CODEX_HOME` 控制，只隔離 `CODEX_HOME` 時，真實的 skill 仍會被載入（[C2](../spikes/codex-verification-result.md#c2-codex_home)、S1 附註 2）。
+- 共同參數：
+  - Claude：`--no-session-persistence`、`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`，認證用 `CLAUDE_CODE_OAUTH_TOKEN`。
+  - Codex：`-s read-only --ephemeral -o <file>`，認證在暫存的 `CODEX_HOME` 內執行 `codex login`。
+- **model 必須明確指定**（Claude 用 `--model`，Codex 用 `-m`）。暫存設定目錄不會帶入使用者的 model 設定，不指定就會改用 CLI 預設值，量到的就不是日常使用的 model（S1 附註 3）。指定值取自 `surfaces.yaml` 中該 surface 的 `model` 欄位。
+- 驗證「部署檔有載入」時，以「model 能否引用檔案內容與路徑」為準，**不要**以「是否照做 canary 指令」為準。Claude 在 project 層會把「回覆開頭印固定字串」判定為 prompt injection 而拒絕照做，即使檔案已經載入（S1 附註 1）。
 
 ### 7. 格式
 
@@ -78,6 +92,9 @@ check:
 
 - run 紀錄存為 `evals/<surface>/<intent>/runs/<date>-<short-hash>.json`。
 - 內容包含：部署檔 hash、model id、CLI 版本、注入方式，以及每次執行的原始 output 和判定結果。
+- model id 是 client 端的設定值，不保證就是 server 實際使用的 model，紀錄中要註明這一點：
+  - Codex：取自 human output 開頭的 `model:` 標頭；改用 `--json` 時，以 `-m` 指定的值為準（[C11](../spikes/codex-verification-result.md#c11-實際-model-id)）。
+  - Claude：取自 `--output-format json` 的 `modelUsage`。
 - run 紀錄全部 commit。
 
 ### 8. Model 更新
@@ -120,4 +137,4 @@ check:
 - `experimental` 規則超過部署規則總數的一半，且持續 3 個月以上，或你已無法判斷哪些規則有效。此時討論是否加上數量或天數上限。
 - 18 次的上限反覆不足以下結論，例如結果在 1/3 與 2/3 之間擺盪。此時調整重跑次數，架構不變。
 - 人工抽查 judge 判定，10 筆中有 3 筆以上不一致。此時該類 intent 改走手動測試。
-- spike S1 的結果顯示某個 surface 無法隔離。此時該 surface 只走手動測試。
+- CLI 改版導致上表的隔離做法失效。例如 `CLAUDE_CONFIG_DIR`、`CODEX_HOME` 的語意改變，或 Codex 新增其他不受控制的 home 路徑。此時重跑 S1；仍無法隔離的 surface 改走手動測試。
