@@ -8,7 +8,7 @@
   scope: global
   channel: manual
   files: [surfaces/claude-ai/preferences.md]
-  model: null
+  model: Opus 5.5
   limit:
     value: null
     unit: unknown
@@ -24,7 +24,7 @@
   channel: copy
   files: [surfaces/claude-code/CLAUDE.md]
   targets: [~/.claude/CLAUDE.md]
-  model: null
+  model: Opus 5.5
   limit:
     value: 200
     unit: lines
@@ -38,7 +38,7 @@
   scope: repo
   channel: in-repo
   files: [CLAUDE.md]
-  model: null
+  model: Opus 5.5
   limit:
     value: 200
     unit: lines
@@ -60,7 +60,7 @@
   channel: copy
   files: [surfaces/codex/AGENTS.md]
   targets: [~/.codex/AGENTS.md]
-  model: null
+  model: GPT-6.1 Sol
   limit:
     value: 5000
     unit: chars
@@ -81,7 +81,7 @@
   scope: repo
   channel: in-repo
   files: [AGENTS.md]
-  model: null
+  model: GPT-6.1 Sol
   limit:
     value: 32768
     unit: bytes

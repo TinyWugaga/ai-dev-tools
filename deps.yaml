@@ -2,7 +2,7 @@
 # upstream：skill 原始碼位置（repo URL 或本機路徑），check-deps 用來比對已安裝版本。
 # install_paths：各 surface 的安裝位置，{name} 會被替換成 skill 名稱。
 
-upstream: null
+upstream: https://github.com/TinyWugaga/tiny-agents-skills
 
 install_paths:
   claude-code-global:
