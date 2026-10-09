@@ -16,6 +16,7 @@
     checked: 2026-10-04
 
 - id: claude-code-global
+  migration: pending   # 現行內容尚未遷入；遷入後移除
   kind: agentic
   scope: global
   channel: copy
@@ -44,6 +45,7 @@
     checked: 2026-10-04
 
 - id: chatgpt
+  migration: pending   # 現行內容尚未遷入；遷入後移除
   kind: chat
   scope: global
   channel: manual
@@ -57,6 +59,7 @@
   notes: 傾向不套用到 Codex cloud 任務（docs/spikes/S2-result.md）。
 
 - id: codex-global
+  migration: pending   # 現行內容尚未遷入；遷入後移除
   kind: agentic
   scope: global
   channel: copy

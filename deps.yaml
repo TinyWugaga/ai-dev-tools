@@ -12,4 +12,6 @@ install_paths:
     - ~/.agents/skills/{name}
   claude-ai: manual
 
-skills: []
+skills:
+  - name: token-preflight
+  - name: judgment

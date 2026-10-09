@@ -35,6 +35,8 @@ Codex cloud 原本假設會讀 repo 的 `AGENTS.md`，因此併在 `codex-repo` 
 
    例外：`surfaces.yaml` 標為 `channel: none` 的 surface（目前只有 `codex-cloud`）沒有載入管道，不列入這項完整性檢查。
 
+   遷移期例外：`surfaces.yaml` 標為 `migration: pending` 的 surface，現行內容還沒遷入本 repo。缺少的 intent 紀錄由 lint 降為警告，這類 surface 也一律拒絕 deploy。內容遷入、補齊紀錄後移除這個旗標，就恢復原本的嚴格檢查。這個旗標只用於遷移，不能用來長期跳過檢查（2026-10-09 加入，原因是四個 global 來源無法一次取得）。
+
    不允許「未提及」。lint 負責檢查這項完整性。
 4. **平台的切分單位是 surface，不是 vendor。**
 

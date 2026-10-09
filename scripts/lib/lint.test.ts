@@ -121,6 +121,13 @@ describe("lint", () => {
     assert.ok(result.warnings.some((w) => /超過上限/.test(w)));
   });
 
+  it("downgrades missing intent records to warnings while migration is pending", () => {
+    const pending = structuredClone(SURFACES).map((s) => (s.id === "repo" ? { ...s, migration: "pending" } : s));
+    const result = lint(fixture({ surfaces: pending, rules: "- rule A\n", records: [record("a", "rule A")] }));
+    assert.ok(!result.errors.some((e) => /缺少 intent b/.test(e)));
+    assert.ok(result.warnings.some((w) => /缺少 intent b/.test(w)));
+  });
+
   it("rejects intents that do not apply to the surface", () => {
     const intents = [...INTENTS, { id: "c", goal: "C", kinds: ["chat"], scopes: ["global"] }];
     const records = [record("a", "rule A"), record("b", "rule B"), record("c", "rule A")];

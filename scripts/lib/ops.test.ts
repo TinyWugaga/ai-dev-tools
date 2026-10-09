@@ -167,6 +167,15 @@ describe("deploy (manual)", () => {
     assert.equal(statusOf(ctx, "chat"), "pending-deploy");
   });
 
+  it("refuses surfaces whose migration is pending", () => {
+    const { ctx, root, target } = setup();
+    const surfaces = parse(readFileSync(join(root, "surfaces.yaml"), "utf8")) as { id: string; migration?: string }[];
+    surfaces.find((s) => s.id === "cli")!.migration = "pending";
+    writeFileSync(join(root, "surfaces.yaml"), stringify(surfaces));
+    assert.match(deploy(ctx, "cli").lines.at(-1)!, /遷移中/);
+    assert.ok(!existsSync(target));
+  });
+
   it("does nothing for channel none", () => {
     const { ctx } = setup();
     assert.ok(deploy(ctx, "cloud").ok);

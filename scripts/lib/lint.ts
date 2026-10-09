@@ -33,6 +33,7 @@ export interface Surface {
   model?: string | null;
   limit?: Limit;
   notes?: string;
+  migration?: "pending";
 }
 
 export interface RationaleRecord {
@@ -110,6 +111,10 @@ function checkSurface(root: string, surface: Surface, result: LintResult): strin
     result.errors.push(`${where}: channel 無效`);
     return undefined;
   }
+  if (surface.migration !== undefined && surface.migration !== "pending")
+    result.errors.push(`${where}: migration 只能是 pending 或不填`);
+  if (surface.migration === "pending")
+    result.warnings.push(`${where}: 遷移中（migration: pending），缺少的 intent 紀錄只列為警告，且不可 deploy`);
   if (surface.channel === "none") return undefined;
 
   if (!surface.files?.length) {
@@ -228,8 +233,10 @@ export function lint(root: string): LintResult {
 
     for (const intent of intents.values()) {
       if (!intent.kinds.includes(surface.kind) || !intent.scopes.includes(surface.scope)) continue;
-      if (!records.some((r) => r?.intent === intent.id))
-        result.errors.push(`${file}: 缺少 intent ${intent.id} 的紀錄（每個適用的 intent 都必須有狀態，ADR-0001）`);
+      if (records.some((r) => r?.intent === intent.id)) continue;
+      const message = `${file}: 缺少 intent ${intent.id} 的紀錄（每個適用的 intent 都必須有狀態，ADR-0001）`;
+      if (surface.migration === "pending") result.warnings.push(message);
+      else result.errors.push(message);
     }
 
     if (content === undefined) continue;
