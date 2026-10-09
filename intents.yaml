@@ -256,3 +256,21 @@
   goal: skill 以裸名稱引用、不寫死 namespace；路由表只列實際安裝的 skill，移除 skill 時同步刪除對應路由。
   kinds: [agentic]
   scopes: [global]
+
+# global：遷入自 claude.ai preferences 的「[Imported from Cowork]」段（2026-10-09）。
+# 規則針對 Cowork 專案的預設資料夾；目前只有 claude-ai 會載入，因此 kinds 只標 chat。
+
+- id: cowork.default-folder
+  goal: 專案需指定預設資料夾；使用者沒有指定、也沒有表明不指定時，提醒設定。
+  kinds: [chat]
+  scopes: [global]
+
+- id: cowork.instructions-lookup
+  goal: 依固定順序讀取預設資料夾中的專案規範檔；規範檔只有匯入指令、沒有規則本文時，視同沒有載入；都不存在時提醒新增。
+  kinds: [chat]
+  scopes: [global]
+
+- id: cowork.unreadable-folder-notice
+  goal: 讀不到預設資料夾中的檔案時，先告知使用者再繼續。
+  kinds: [chat]
+  scopes: [global]
