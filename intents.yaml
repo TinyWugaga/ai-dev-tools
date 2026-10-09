@@ -214,3 +214,45 @@
   goal: 發現使用者重複提供同樣脈絡時，建議外部化成 skill 或專案知識。
   kinds: [chat, agentic]
   scopes: [global]
+
+# global：遷入自 ~/.claude/CLAUDE.md（2026-10-09），只適用於 agentic
+
+- id: meta.maintenance-guide
+  goal: 修改全域規則檔或 skill 判準前，先讀維護指南；規則檔只放每輪都適用的規則與路由，細則放在按需載入的 skill。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: trigger.dispatch
+  goal: 委派子任務（subagent、平行派工）或調整 model / effort 前，先套用派工準則。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: trigger.skill-absent-fallback
+  goal: 被引用的 skill 不可用時，規則本身仍要做到，並回報 skill 缺席；不得假裝已使用或已派工。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: retry.stop-after-two
+  goal: 同一子任務失敗兩輪即停止重試，改為升級做法或詢問使用者。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: decisions.persist
+  goal: 方向性決定做成後立即落檔：專案技術決策寫入專案文件，跨專案偏好寫入 memory；收工或壓縮 context 前補齊未落檔的結論。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: routing.table
+  goal: 以「情境 → 先走的 skill 或流程」路由表作為觸發索引。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: workflow.plan-first
+  goal: 多步驟或會動到 3 個以上檔案的任務，先出方案並取得核准再動手。
+  kinds: [agentic]
+  scopes: [global]
+
+- id: meta.skill-reference-hygiene
+  goal: skill 以裸名稱引用、不寫死 namespace；路由表只列實際安裝的 skill，移除 skill 時同步刪除對應路由。
+  kinds: [agentic]
+  scopes: [global]

@@ -6,7 +6,7 @@ import { splitRuleBlocks } from "./blocks.ts";
 export type Kind = "chat" | "agentic";
 export type Scope = "global" | "repo";
 export type Channel = "copy" | "manual" | "in-repo" | "none";
-export type Status = "implemented" | "not-needed" | "experimental" | "stale";
+export type Status = "implemented" | "not-needed" | "experimental" | "stale" | "unimplemented";
 
 export interface Intent {
   id: string;
@@ -57,7 +57,8 @@ export interface LintResult {
 const KINDS = ["chat", "agentic"];
 const SCOPES = ["global", "repo"];
 const CHANNELS = ["copy", "manual", "in-repo", "none"];
-const STATUSES = ["implemented", "not-needed", "experimental", "stale"];
+const STATUSES = ["implemented", "not-needed", "experimental", "stale", "unimplemented"];
+const TENTATIVE = ["experimental", "unimplemented"];
 const UNITS = ["chars", "bytes", "lines", "unknown", "none"];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const UNOBSERVED = /^unobserved\b/;
@@ -177,14 +178,14 @@ function checkRecord(
   const unobserved = UNOBSERVED.test(record.observed ?? "");
   const hasEvidence = record.evidence && record.evidence !== "none";
 
-  if (record.status === "not-needed") {
-    if (record.text) err("not-needed 不可有 text（規則不應出現在部署檔）");
+  if (record.status === "not-needed" || record.status === "unimplemented") {
+    if (record.text) err(`${record.status} 不可有 text（規則不應出現在部署檔）`);
   } else if (!record.text?.trim()) {
     err("缺少 text（部署檔中的逐字原文）");
   }
-  if (record.status !== "experimental") {
-    if (!hasEvidence) err(`${record.status} 必須有 evidence；evidence 為 none 時只能是 experimental（ADR-0002）`);
-    if (unobserved) err(`${record.status} 不可為 unobserved；unobserved 只能是 experimental（ADR-0002）`);
+  if (!TENTATIVE.includes(record.status)) {
+    if (!hasEvidence) err(`${record.status} 必須有 evidence；evidence 為 none 時只能是 experimental 或 unimplemented（ADR-0002）`);
+    if (unobserved) err(`${record.status} 不可為 unobserved；unobserved 只能是 experimental 或 unimplemented（ADR-0002）`);
   }
   if (!record.model && !unobserved) err("缺少 model（觀察時的 model）");
   if (hasEvidence && !existsSync(join(root, record.evidence))) err(`evidence 路徑不存在：${record.evidence}`);
@@ -195,7 +196,7 @@ function checkRecord(
       if (!surfaceIds.has(key)) err(`depends_on.pinned 的 surface 不存在：${key}`);
   }
 
-  if (record.status === "experimental" || record.status === "stale")
+  if (record.status !== "implemented" && record.status !== "not-needed")
     result.pending.push(`${surface.id} / ${record.intent}: ${record.status}`);
 }
 

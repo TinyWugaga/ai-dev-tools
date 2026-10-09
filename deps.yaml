@@ -15,3 +15,4 @@ install_paths:
 skills:
   - name: token-preflight
   - name: judgment
+  - name: dispatch

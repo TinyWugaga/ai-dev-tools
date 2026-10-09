@@ -86,6 +86,15 @@ describe("lint", () => {
     assert.ok(hasError(root, /implemented 不可為 unobserved/));
   });
 
+  it("accepts unimplemented without text and rejects it with text", () => {
+    const ok = [record("a", "rule A"), record("b", "", { status: "unimplemented", text: undefined })];
+    const okResult = lint(fixture({ rules: "- rule A\n", records: ok }));
+    assert.deepEqual(okResult.errors, []);
+    assert.ok(okResult.pending.some((p) => p.includes("b: unimplemented")));
+    const bad = [record("a", "rule A"), record("b", "rule B", { status: "unimplemented" })];
+    assert.ok(hasError(fixture({ records: bad }), /unimplemented 不可有 text/));
+  });
+
   it("allows evidence none only on experimental", () => {
     const records = [record("a", "rule A", { status: "stale", observed: "x", model: "m" }), record("b", "rule B")];
     assert.ok(hasError(fixture({ records }), /stale 必須有 evidence/));

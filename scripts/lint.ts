@@ -13,6 +13,6 @@ const section = (title: string, items: string[]) => {
 
 section("錯誤", errors);
 section("警告", warnings);
-section("待驗（experimental / stale）", pending);
+section("待驗（experimental / stale / unimplemented）", pending);
 console.log(errors.length ? `\nlint 失敗：${errors.length} 個錯誤` : "\nlint 通過");
 process.exitCode = errors.length ? 1 : 0;

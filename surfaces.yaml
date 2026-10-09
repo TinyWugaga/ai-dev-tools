@@ -19,7 +19,6 @@
     本機 Claude Code CLI 回報的載入清單中沒有它（2026-10-09 CLI 自述，未以 canary 驗證）。
 
 - id: claude-code-global
-  migration: pending   # 現行內容尚未遷入；遷入後移除
   kind: agentic
   scope: global
   channel: copy
@@ -56,7 +55,6 @@
     傾向不套用到 Codex cloud 任務（docs/spikes/S2-result.md）。
 
 - id: codex-global
-  migration: pending   # 現行內容尚未遷入；遷入後移除
   kind: agentic
   scope: global
   channel: copy
