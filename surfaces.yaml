@@ -14,6 +14,9 @@
     unit: unknown
     source: 無官方數字
     checked: 2026-10-04
+  notes: >-
+    除了 claude.ai 對話，Claude Code cloud session 也會載入（2026-10-09 本 repo 的 cloud session 觀察到）。
+    本機 Claude Code CLI 回報的載入清單中沒有它（2026-10-09 CLI 自述，未以 canary 驗證）。
 
 - id: claude-code-global
   migration: pending   # 現行內容尚未遷入；遷入後移除
@@ -45,18 +48,12 @@
     checked: 2026-10-04
 
 - id: chatgpt
-  migration: pending   # 現行內容尚未遷入；遷入後移除
   kind: chat
   scope: global
-  channel: manual
-  files: [surfaces/chatgpt/custom-instructions.md]
-  model: null
-  limit:
-    value: 5000
-    unit: chars
-    source: https://help.openai.com/en/articles/8096356-chatgpt-custom-instructions （Plus 方案）
-    checked: 2026-10-05
-  notes: 傾向不套用到 Codex cloud 任務（docs/spikes/S2-result.md）。
+  channel: none
+  notes: >-
+    與 ~/.codex/AGENTS.md 雙向同步（2026-10-09 使用者實測），內容由 codex-global 維護與部署。
+    傾向不套用到 Codex cloud 任務（docs/spikes/S2-result.md）。
 
 - id: codex-global
   migration: pending   # 現行內容尚未遷入；遷入後移除
@@ -67,11 +64,16 @@
   targets: [~/.codex/AGENTS.md]
   model: null
   limit:
-    value: null
-    unit: none
-    source: docs/spikes/codex-verification-result.md#c4-大小上限 （原始碼未見 global 上限）
-    checked: 2026-10-04
+    value: 5000
+    unit: chars
+    source: >-
+      https://help.openai.com/en/articles/8096356-chatgpt-custom-instructions （Plus 方案）。
+      本檔與 ChatGPT Custom Instructions 雙向同步，所以套用 ChatGPT 的上限；Codex 本身沒有 global 上限（C4）。
+      超過上限時同步會怎麼處理，尚未驗證。
+    checked: 2026-10-09
   notes: >-
+    與 ChatGPT Custom Instructions 雙向同步（2026-10-09 使用者實測），ChatGPT 對話也會讀到本檔，
+    所以不能放只對 agent 有意義的規則。
     在 Codex CLI 與 app 的 local project 生效，不適用於 Codex cloud（C6）。
     非空的 ~/.codex/AGENTS.override.md 會讓本檔整份失效（C1）。
     Codex app 的 Personalization 會直接改寫本檔（C7）。
