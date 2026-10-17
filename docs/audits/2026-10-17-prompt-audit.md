@@ -1,6 +1,6 @@
 # Prompt audit — 2026-10-17
 
-提案 diff：[`2026-10-17-prompt-audit.patch`](2026-10-17-prompt-audit.patch)（尚未套用；已在 scratch 複本上套用並通過 `npm run lint`）。
+提案 diff：[`2026-10-17-prompt-audit.patch`](2026-10-17-prompt-audit.patch)（已於 `096c929` 套用）。
 
 ## 假設
 

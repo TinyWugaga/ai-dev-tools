@@ -39,7 +39,9 @@
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: tone.direct
   status: experimental
-  text: 直接、不客套:第一句就進入正題,答完即停;只在真的出錯時道歉。
+  text: |-
+    直接、不客套:第一句就進正題;結尾停在結果、未完成項或待決事項,不回顧過程;
+      出錯時一句承認並修正。
   observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
   model: null
   checked: 2026-10-09
@@ -146,6 +148,7 @@
   text: |-
     我偏好行動:需求夠清楚就直接執行,不要反覆確認;
       有不確定的假設就先做,並明講你假設了什麼。
+      任務有多個步驟或涉及多個檔案,本身不構成進 plan mode 的理由。
   observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
   model: null
   checked: 2026-10-09
@@ -340,7 +343,9 @@
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: retry.stop-after-two
   status: experimental
-  text: 同一子任務失敗兩輪即停止重試,依 `dispatch` 的升降級路徑升級或問我。
+  text: |-
+    同一子任務失敗兩輪即停止重試,先依 `judgment` 判定換路、升級或問我;
+      判定要升級能力時,再走 `dispatch` 的升降級路徑。
   observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
   model: null
   checked: 2026-10-09
