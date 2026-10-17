@@ -1,6 +1,6 @@
 # codex-global 缺口分流（2026-10-17）
 
-`rationale/codex-global.yaml` 遷入時有 8 個 intent 標為 `unimplemented`：這些規則只存在於 Claude Code 全域檔。本紀錄說明逐一判定的結果，同時作為其中 4 筆 `not-needed` 紀錄的 evidence（依 ADR-0002 第 3 點，「結構上不適用」也算 `not-needed`）。
+`rationale/codex-global.yaml` 遷入時有 8 個 intent 標為 `unimplemented`：這些規則只存在於 Claude Code 全域檔。本紀錄說明逐一判定的結果：保留的規則怎麼針對 Codex 改寫，以及不適用的規則理由與推翻條件。`not-applicable` 紀錄的 `reason` 會連到這份文件。
 
 判定時的限制：
 
@@ -17,7 +17,7 @@
 | `decisions.persist` | 只保留「寫入專案文件」。拿掉 memory 檔和 `/compact`，因為 Codex 沒有對應的機制。 |
 | `workflow.plan-first` | 改寫成獨立的條文，不提 plan mode 這個工具名，只要求「先出方案、取得核准再動手」。 |
 
-## 不需要（狀態 `not-needed`，結構上不適用）
+## 不適用（狀態 `not-applicable`，定義見 ADR-0002）
 
 | intent | 理由 |
 |---|---|

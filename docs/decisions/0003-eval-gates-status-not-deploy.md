@@ -17,6 +17,7 @@
 
 - eval 永遠不阻擋部署。新增或修改的規則直接部署，狀態為 `experimental`。
 - 只有在把狀態升級為 `implemented` 或 `not-needed` 時，才需要 eval 或手動測試。
+- `not-applicable`（定義見 ADR-0002）不經過 eval：判定依據是 surface 的結構，不是 model 的行為，所以進出都不需要 eval，下表的降級也不適用。
 - 以下情況會自動降級。被降級的規則仍留在部署檔中，只是列入 lint 的待驗清單：
 
   | 觸發 | 新狀態 |

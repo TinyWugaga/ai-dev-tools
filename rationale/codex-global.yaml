@@ -321,18 +321,14 @@
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: meta.maintenance-guide
-  status: not-needed
-  observed: "結構上不適用：維護指南只存在於 ~/.claude/harness/maintenance.md；本檔只透過本 repo 修改並由 lint 把關"
-  model: GPT-6.1 Sol
+  status: not-applicable
+  reason: 維護指南只存在於 ~/.claude/harness/maintenance.md；本檔只透過本 repo 修改並由 lint 把關（docs/decisions/codex-global-gap-triage.md）
   checked: 2026-10-17
-  evidence: docs/decisions/codex-global-gap-triage.md
   revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時
 - intent: trigger.dispatch
-  status: not-needed
-  observed: "結構上不適用：dispatch skill 只適用於 Claude Code，Codex agent 無法自行切換 model，ChatGPT 對話無派工"
-  model: GPT-6.1 Sol
+  status: not-applicable
+  reason: dispatch skill 只適用於 Claude Code，Codex agent 無法自行切換 model，ChatGPT 對話無派工（docs/decisions/codex-global-gap-triage.md）
   checked: 2026-10-17
-  evidence: docs/decisions/codex-global-gap-triage.md
   revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時
 - intent: trigger.skill-absent-fallback
   status: experimental
@@ -365,11 +361,9 @@
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: routing.table
-  status: not-needed
-  observed: "結構上不適用：「觸發」段已逐條列出 skill 觸發條件，路由表只會重複並佔用 5,000 字元額度"
-  model: GPT-6.1 Sol
+  status: not-applicable
+  reason: 「觸發」段已逐條列出 skill 觸發條件，路由表只會重複並佔用 5,000 字元額度（docs/decisions/codex-global-gap-triage.md）
   checked: 2026-10-17
-  evidence: docs/decisions/codex-global-gap-triage.md
   revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時
 - intent: workflow.plan-first
   status: experimental
@@ -382,9 +376,7 @@
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: meta.skill-reference-hygiene
-  status: not-needed
-  observed: "結構上不適用：規範的是路由表寫法而 routing.table 不實作；skill 安裝狀態由 deps.yaml 與 check-deps 把關"
-  model: GPT-6.1 Sol
+  status: not-applicable
+  reason: 規範的是路由表寫法而 routing.table 不實作；skill 安裝狀態由 deps.yaml 與 check-deps 把關（docs/decisions/codex-global-gap-triage.md）
   checked: 2026-10-17
-  evidence: docs/decisions/codex-global-gap-triage.md
   revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時

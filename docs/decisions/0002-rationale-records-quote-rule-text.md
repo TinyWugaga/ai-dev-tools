@@ -23,7 +23,7 @@
 
    ```yaml
    - intent: lang.zh-tw
-     status: implemented        # implemented | not-needed | experimental | stale | unimplemented
+     status: implemented        # implemented | not-needed | not-applicable | experimental | stale | unimplemented
      text: "<部署檔中的逐字原文>"
      observed: "無此規則時，<model> 在 X 情境會 Y"
      model: <model id>
@@ -47,7 +47,7 @@
 
 3. 狀態約束：
    - `not-needed` 必須填寫 `observed` 和 `evidence`，用來證明 model 在沒有這條規則時已經表現正確。`not-needed` 的紀錄不可有 `text`。
-     規則在該 surface 結構上不適用時（依賴的檔案或 skill 在該平台不存在，或與同檔其他規則重複），也可以標 `not-needed`：`observed` 以「結構上不適用：」開頭並寫明理由，`evidence` 指向 `docs/decisions/` 中記錄該判定的文件（2026-10-17 加入）。
+   - `not-applicable`：intent 的 kind／scope 符合，但在這個 surface 結構上不適用。例如規則依賴的工具、skill 或檔案在該平台不存在，或在長度上限下與同檔其他規則重複。必須填寫 `reason`，不需要 `observed`、`evidence`、`model`，也不可有 `text`。進入或離開這個狀態都不需要 eval。和 `not-needed` 分開，是為了區分「驗證過不需要」和「沒驗證，因為不適用」（2026-10-17 加入）。
    - 還沒有任何觀察紀錄的規則，`observed` 以 `unobserved:` 開頭並寫明原因，`model` 可以留空。這種紀錄只能是 `experimental`。
    - `unimplemented`：intent 適用但部署檔沒有對應規則，尚未決定要補上或判定為 `not-needed`。不可有 `text`，可以是 `unobserved`，`evidence` 可以是 `none`（2026-10-09 加入）。
    - `evidence: none` 時，`status` 只能是 `experimental` 或 `unimplemented`。
