@@ -47,6 +47,8 @@ export function deploy(ctx: Ctx, id: string, opts: DeployOptions = {}): DeployRe
   const surface = surfaces.find((s) => s.id === id);
   if (!surface) return fail(`surface 不存在：${id}（可用：${surfaces.map((s) => s.id).join(", ")}）`);
   if (surface.channel === "none") return { ok: true, lines: [`${id}：channel 為 none，沒有可部署的管道`] };
+  if (surface.migration === "pending")
+    return fail(`${id} 仍在遷移中（surfaces.yaml 的 migration: pending），內容補齊並移除旗標後才能部署`);
   if (surface.channel === "in-repo") return { ok: true, lines: [`${id}：repo 內的實體檔，不需要 deploy`] };
 
   const lintErrors = lint(ctx.root).errors;

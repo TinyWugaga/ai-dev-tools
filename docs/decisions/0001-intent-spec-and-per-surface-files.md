@@ -17,6 +17,8 @@
 
 Codex cloud 原本假設會讀 repo 的 `AGENTS.md`，因此併在 `codex-repo` 底下。[S2](../spikes/S2-result.md) 實測後推翻了這個假設：一般 cloud 任務的 cwd 不在 repo 內，不會載入 repo 的 `AGENTS.md`；ChatGPT Custom Instructions 也傾向不套用。所以 Codex cloud 拆成獨立的 surface，而且目前**沒有可以部署 instruction 的管道**。
 
+ChatGPT Custom Instructions 與 `~/.codex/AGENTS.md` 雙向同步（2026-10-09 使用者實測）：在任一邊修改，另一邊都會跟著更新。兩者實際上是同一份資料，所以 `chatgpt` 改成 `channel: none`，內容只由 `codex-global` 維護。這份檔案同時供 ChatGPT 對話與 Codex agent 讀取，因此不能放只對 agent 有意義的規則，長度也受 ChatGPT 的 5,000 字元上限限制。
+
 各 surface 在載入方式、長度限制和內容需求上都不一樣。例如 chat 不需要 git 相關規則，而 chat 類 surface 有字數上限。
 
 ## 決策
@@ -32,8 +34,11 @@ Codex cloud 原本假設會讀 repo 的 `AGENTS.md`，因此併在 `codex-repo` 
 3. **intent 與 surface 的每一種組合都必須有明確狀態**，記錄在 rationale 中（見 ADR-0002）：
    - 已實作：`implemented` 或 `experimental`
    - 明確不實作：`not-needed`
+   - 尚未實作、也還沒決定：`unimplemented`。intent 適用於這個 surface，但部署檔裡目前沒有對應規則（2026-10-09 加入）。例如遷移時只有 Claude Code 全域檔有 dispatch、plan mode 等規則，Codex/ChatGPT 共用檔沒有。這類紀錄會出現在 lint 的待驗清單，直到補上規則或改成 `not-needed`。
 
-   例外：`surfaces.yaml` 標為 `channel: none` 的 surface（目前只有 `codex-cloud`）沒有載入管道，不列入這項完整性檢查。
+   例外：`surfaces.yaml` 標為 `channel: none` 的 surface（目前是 `codex-cloud` 和 `chatgpt`）沒有載入管道，不列入這項完整性檢查。
+
+   遷移期例外：`surfaces.yaml` 標為 `migration: pending` 的 surface，現行內容還沒遷入本 repo。缺少的 intent 紀錄由 lint 降為警告，這類 surface 也一律拒絕 deploy。內容遷入、補齊紀錄後移除這個旗標，就恢復原本的嚴格檢查。這個旗標只用於遷移，不能用來長期跳過檢查（2026-10-09 加入，原因是四個 global 來源無法一次取得）。
 
    不允許「未提及」。lint 負責檢查這項完整性。
 4. **平台的切分單位是 surface，不是 vendor。**

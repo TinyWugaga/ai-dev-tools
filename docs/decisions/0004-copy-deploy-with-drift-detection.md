@@ -11,10 +11,11 @@
 
 **自動目標**：`~/.claude/CLAUDE.md`、`~/.codex/AGENTS.md`。
 
-**手動目標**：claude.ai preferences、ChatGPT Custom Instructions。
+**手動目標**：claude.ai preferences。ChatGPT Custom Instructions 與 `~/.codex/AGENTS.md` 雙向同步（2026-10-09 實測），所以不另外列為手動目標，由 `codex-global` 的部署一併更新。
 
 除了本 repo，還有其他來源會直接寫入自動目標：
 
+- chatgpt.com 的 Custom Instructions 會同步寫入 `~/.codex/AGENTS.md`（2026-10-09 實測）。
 - Codex app 的 Custom instructions UI 會寫入 `~/.codex/AGENTS.md`（2026-10-05 實測，見[查核 C7](../spikes/codex-verification-result.md#c7-codex-app-custom-instructions-的寫入位置)）。
 - Claude Code 可能被要求「記住」某件事，因而寫入 `~/.claude/CLAUDE.md`。
 

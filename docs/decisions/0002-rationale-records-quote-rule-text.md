@@ -23,7 +23,7 @@
 
    ```yaml
    - intent: lang.zh-tw
-     status: implemented        # implemented | not-needed | experimental | stale
+     status: implemented        # implemented | not-needed | experimental | stale | unimplemented
      text: "<部署檔中的逐字原文>"
      observed: "無此規則時，<model> 在 X 情境會 Y"
      model: <model id>
@@ -48,8 +48,9 @@
 3. 狀態約束：
    - `not-needed` 必須填寫 `observed` 和 `evidence`，用來證明 model 在沒有這條規則時已經表現正確。`not-needed` 的紀錄不可有 `text`。
    - 還沒有任何觀察紀錄的規則，`observed` 以 `unobserved:` 開頭並寫明原因，`model` 可以留空。這種紀錄只能是 `experimental`。
-   - `evidence: none` 時，`status` 只能是 `experimental`。
-   - lint 輸出所有 `experimental` 和 `stale` 的記錄。
+   - `unimplemented`：intent 適用但部署檔沒有對應規則，尚未決定要補上或判定為 `not-needed`。不可有 `text`，可以是 `unobserved`，`evidence` 可以是 `none`（2026-10-09 加入）。
+   - `evidence: none` 時，`status` 只能是 `experimental` 或 `unimplemented`。
+   - lint 輸出所有 `experimental`、`stale` 和 `unimplemented` 的記錄。
 
 4. 依賴 skill 的記錄要填 `depends_on`，並記下蒐集 evidence 當時各 surface 上該 skill 的內容 hash。比對與降級規則見 ADR-0003。
 
