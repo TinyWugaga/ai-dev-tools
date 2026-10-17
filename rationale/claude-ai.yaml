@@ -29,7 +29,7 @@
   revisit_when: 補記此規則因應的 model 行為，或下一次 claude.ai 預設 model 更換時
 - intent: tone.direct
   status: experimental
-  text: 直接、不客套。不要開場寒暄、不要結尾總結「我做了什麼」、不要過度道歉。
+  text: 直接、不客套:第一句就進入正題,答完即停;只在真的出錯時道歉。
   observed: "unobserved: 從既有 claude.ai preferences 遷入，原始觀察未記錄"
   model: null
   checked: 2026-10-09

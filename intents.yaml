@@ -248,7 +248,7 @@
   scopes: [global]
 
 - id: workflow.plan-first
-  goal: 多步驟或會動到 3 個以上檔案的任務，先出方案並取得核准再動手。
+  goal: 需求已清楚、但實作方向有選錯需重做的未定案取捨時，先出方案並取得核准再動手；步驟多或檔案多本身不是理由。
   kinds: [agentic]
   scopes: [global]
 

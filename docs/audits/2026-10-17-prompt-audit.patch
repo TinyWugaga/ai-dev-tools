@@ -1,0 +1,117 @@
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 61fe001..1ec7102 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -1,6 +1,6 @@
+ # ai-dev-tools（Claude Code 專用）
+ 
+-- 修改前先讀 `docs/decisions/` 中與任務相關的 ADR，以 ADR 作為設計依據。需求和 ADR 衝突時，先指出衝突點再動手。
++- 修改前先讀 `docs/decisions/` 中與任務相關的 ADR，以 ADR 作為設計依據。需求和 ADR 衝突時，先指出衝突點，等我決定後再動手。
+ - 修改 `surfaces/`、`CLAUDE.md` 或 `AGENTS.md` 中的規則文字時，在同一次變更內更新 `rationale/<surface-id>.yaml` 對應紀錄的 `text`，讓兩邊逐字相同，並把 `status` 設為 `experimental`。
+ - 不要直接寫入 `~/.claude`、`~/.codex`、`~/.agents`。global 檔只透過 deploy script 更新，而且由使用者自己執行。
+ - 本檔只給 Claude Code 讀，`AGENTS.md` 只給 Codex 讀。不要用 import、symlink 或複製讓兩者共用內容。
+diff --git a/intents.yaml b/intents.yaml
+index 3df9954..436e99e 100644
+--- a/intents.yaml
++++ b/intents.yaml
+@@ -248,7 +248,7 @@
+   scopes: [global]
+ 
+ - id: workflow.plan-first
+-  goal: 多步驟或會動到 3 個以上檔案的任務，先出方案並取得核准再動手。
++  goal: 需求已清楚、但實作方向有選錯需重做的未定案取捨時，先出方案並取得核准再動手；步驟多或檔案多本身不是理由。
+   kinds: [agentic]
+   scopes: [global]
+ 
+diff --git a/rationale/claude-ai.yaml b/rationale/claude-ai.yaml
+index 89f3d79..5e4d14a 100644
+--- a/rationale/claude-ai.yaml
++++ b/rationale/claude-ai.yaml
+@@ -29,7 +29,7 @@
+   revisit_when: 補記此規則因應的 model 行為，或下一次 claude.ai 預設 model 更換時
+ - intent: tone.direct
+   status: experimental
+-  text: 直接、不客套。不要開場寒暄、不要結尾總結「我做了什麼」、不要過度道歉。
++  text: 直接、不客套:第一句就進入正題,答完即停;只在真的出錯時道歉。
+   observed: "unobserved: 從既有 claude.ai preferences 遷入，原始觀察未記錄"
+   model: null
+   checked: 2026-10-09
+diff --git a/rationale/claude-code-global.yaml b/rationale/claude-code-global.yaml
+index 764cf6b..9d1d8c7 100644
+--- a/rationale/claude-code-global.yaml
++++ b/rationale/claude-code-global.yaml
+@@ -39,7 +39,7 @@
+   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
+ - intent: tone.direct
+   status: experimental
+-  text: 直接、不客套。不要開場寒暄、不要結尾總結「我做了什麼」、不要過度道歉。
++  text: 直接、不客套:第一句就進入正題,答完即停;只在真的出錯時道歉。
+   observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
+   model: null
+   checked: 2026-10-09
+@@ -386,7 +386,7 @@
+     | 要派工 / 選模型與 effort / 升降級 / 寫派工 prompt       | `dispatch` skill                    |
+     | 判斷完成沒、該不該問、方向對不對、換路、驗收            | `judgment` skill                    |
+     | 想修改本檔或任何 skill 的判準                           | `~/.claude/harness/maintenance.md`  |
+-    | 多步驟／會動到 >3 檔的任務                              | 先進 plan mode 出方案，核准後再動手 |
++    | 需求已清楚，但實作方向有未定案的取捨（架構、範圍、相容性），選錯需重做 | 先進 plan mode 出方案，核准後再動手 |
+   observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
+   model: null
+   checked: 2026-10-09
+@@ -398,7 +398,7 @@
+     - skill: judgment
+ - intent: workflow.plan-first
+   status: experimental
+-  text: "| 多步驟／會動到 >3 檔的任務                              | 先進 plan mode 出方案，核准後再動手 |"
++  text: "| 需求已清楚，但實作方向有未定案的取捨（架構、範圍、相容性），選錯需重做 | 先進 plan mode 出方案，核准後再動手 |"
+   observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
+   model: null
+   checked: 2026-10-09
+diff --git a/rationale/claude-code-repo.yaml b/rationale/claude-code-repo.yaml
+index 9250bc9..426ca99 100644
+--- a/rationale/claude-code-repo.yaml
++++ b/rationale/claude-code-repo.yaml
+@@ -1,7 +1,7 @@
+ # rationale：CLAUDE.md（ADR-0002）
+ - intent: repo.orientation
+   status: experimental
+-  text: 修改前先讀 `docs/decisions/` 中與任務相關的 ADR，以 ADR 作為設計依據。需求和 ADR 衝突時，先指出衝突點再動手。
++  text: 修改前先讀 `docs/decisions/` 中與任務相關的 ADR，以 ADR 作為設計依據。需求和 ADR 衝突時，先指出衝突點，等我決定後再動手。
+   observed: "unobserved: 預防性規則，建立 repo 時寫入，尚無觀察紀錄"
+   model: null
+   checked: 2026-10-04
+diff --git a/surfaces/claude-ai/preferences.md b/surfaces/claude-ai/preferences.md
+index 90ba4ac..c949bd3 100644
+--- a/surfaces/claude-ai/preferences.md
++++ b/surfaces/claude-ai/preferences.md
+@@ -4,7 +4,7 @@
+   commit message、branch 名稱、程式碼內識別字一律用英文。
+ - 產出物長度對齊任務需要:涵蓋實質內容,不補填充章節、重複摘要、
+   樣板段落、或非必要的前後說明。
+-- 直接、不客套。不要開場寒暄、不要結尾總結「我做了什麼」、不要過度道歉。
++- 直接、不客套:第一句就進入正題,答完即停;只在真的出錯時道歉。
+ - 回覆預設精簡:直接回答問題本身,不做延伸說明。以下情況才展開:
+   我明確要求、涉及 trade-off 需要對比、或不展開會導致我做錯決定。
+ - 一則回覆承載三個以上彼此獨立、我可能需要分別回應的論點時,
+diff --git a/surfaces/claude-code/CLAUDE.md b/surfaces/claude-code/CLAUDE.md
+index 3f1c790..e1cf182 100644
+--- a/surfaces/claude-code/CLAUDE.md
++++ b/surfaces/claude-code/CLAUDE.md
+@@ -10,7 +10,7 @@
+   commit message、branch 名稱、程式碼內識別字一律用英文。
+ - 產出物長度對齊任務需要:涵蓋實質內容,不補填充章節、重複摘要、
+   樣板段落、或非必要的前後說明。
+-- 直接、不客套。不要開場寒暄、不要結尾總結「我做了什麼」、不要過度道歉。
++- 直接、不客套:第一句就進入正題,答完即停;只在真的出錯時道歉。
+ - 回覆預設精簡:直接回答問題本身,不做延伸說明。以下情況才展開:
+   我明確要求、涉及 trade-off 需要對比、或不展開會導致我做錯決定。
+ - 一則回覆承載三個以上彼此獨立、我可能需要分別回應的論點時,
+@@ -104,7 +104,7 @@
+ | 要派工 / 選模型與 effort / 升降級 / 寫派工 prompt       | `dispatch` skill                    |
+ | 判斷完成沒、該不該問、方向對不對、換路、驗收            | `judgment` skill                    |
+ | 想修改本檔或任何 skill 的判準                           | `~/.claude/harness/maintenance.md`  |
+-| 多步驟／會動到 >3 檔的任務                              | 先進 plan mode 出方案，核准後再動手 |
++| 需求已清楚，但實作方向有未定案的取捨（架構、範圍、相容性），選錯需重做 | 先進 plan mode 出方案，核准後再動手 |
+ 
+ skill 一律以裸名稱引用，不寫死 namespace 前綴。
+ **路由表只列當前實際安裝的 skill**；skill 移除時同步刪掉對應列，不留死路由。
