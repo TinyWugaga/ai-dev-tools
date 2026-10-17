@@ -321,58 +321,70 @@
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: meta.maintenance-guide
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
-  model: null
-  checked: 2026-10-09
-  evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  status: not-needed
+  observed: "結構上不適用：維護指南只存在於 ~/.claude/harness/maintenance.md；本檔只透過本 repo 修改並由 lint 把關"
+  model: GPT-6.1 Sol
+  checked: 2026-10-17
+  evidence: docs/decisions/codex-global-gap-triage.md
+  revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時
 - intent: trigger.dispatch
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
-  model: null
-  checked: 2026-10-09
-  evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  status: not-needed
+  observed: "結構上不適用：dispatch skill 只適用於 Claude Code，Codex agent 無法自行切換 model，ChatGPT 對話無派工"
+  model: GPT-6.1 Sol
+  checked: 2026-10-17
+  evidence: docs/decisions/codex-global-gap-triage.md
+  revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時
 - intent: trigger.skill-absent-fallback
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
+  status: experimental
+  text: |-
+    被引用的 skill 不可用時,仍須做到它要求的事,並說明 skill 缺席。
+  observed: "unobserved: 2026-10-17 依 Claude Code 版改寫後補入 Codex/ChatGPT 共用檔，尚未觀察"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-17
   evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: retry.stop-after-two
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
+  status: experimental
+  text: |-
+    同一子任務失敗兩輪即停止重試,先依 judgment skill 判定換路或問我。
+  observed: "unobserved: 2026-10-17 依 Claude Code 版改寫後補入 Codex/ChatGPT 共用檔，尚未觀察"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-17
   evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
+  depends_on:
+    - skill: judgment
 - intent: decisions.persist
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
+  status: experimental
+  text: |-
+    在專案中做成方向性決定時,當下就寫入專案文件(如 docs/decisions/);
+      收工前補齊未落檔的結論。只活在對話裡的決策等於不存在。
+  observed: "unobserved: 2026-10-17 依 Claude Code 版改寫後補入 Codex/ChatGPT 共用檔，尚未觀察"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-17
   evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: routing.table
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
-  model: null
-  checked: 2026-10-09
-  evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  status: not-needed
+  observed: "結構上不適用：「觸發」段已逐條列出 skill 觸發條件，路由表只會重複並佔用 5,000 字元額度"
+  model: GPT-6.1 Sol
+  checked: 2026-10-17
+  evidence: docs/decisions/codex-global-gap-triage.md
+  revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時
 - intent: workflow.plan-first
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
+  status: experimental
+  text: |-
+    需求已清楚,但實作方向有選錯需重做的未定案取捨(架構、範圍、相容性)時,
+      先出方案並取得核准再動手;步驟多或檔案多本身不構成理由。
+  observed: "unobserved: 2026-10-17 依 Claude Code 版改寫後補入 Codex/ChatGPT 共用檔，尚未觀察"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-17
   evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: meta.skill-reference-hygiene
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
-  model: null
-  checked: 2026-10-09
-  evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  status: not-needed
+  observed: "結構上不適用：規範的是路由表寫法而 routing.table 不實作；skill 安裝狀態由 deps.yaml 與 check-deps 把關"
+  model: GPT-6.1 Sol
+  checked: 2026-10-17
+  evidence: docs/decisions/codex-global-gap-triage.md
+  revisit_when: docs/decisions/codex-global-gap-triage.md 的推翻條件成立時

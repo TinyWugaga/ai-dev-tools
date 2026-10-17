@@ -47,6 +47,7 @@
 
 3. 狀態約束：
    - `not-needed` 必須填寫 `observed` 和 `evidence`，用來證明 model 在沒有這條規則時已經表現正確。`not-needed` 的紀錄不可有 `text`。
+     規則在該 surface 結構上不適用時（依賴的檔案或 skill 在該平台不存在，或與同檔其他規則重複），也可以標 `not-needed`：`observed` 以「結構上不適用：」開頭並寫明理由，`evidence` 指向 `docs/decisions/` 中記錄該判定的文件（2026-10-17 加入）。
    - 還沒有任何觀察紀錄的規則，`observed` 以 `unobserved:` 開頭並寫明原因，`model` 可以留空。這種紀錄只能是 `experimental`。
    - `unimplemented`：intent 適用但部署檔沒有對應規則，尚未決定要補上或判定為 `not-needed`。不可有 `text`，可以是 `unobserved`，`evidence` 可以是 `none`（2026-10-09 加入）。
    - `evidence: none` 時，`status` 只能是 `experimental` 或 `unimplemented`。
