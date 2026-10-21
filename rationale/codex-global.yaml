@@ -29,10 +29,12 @@
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: tone.direct
   status: experimental
-  text: 直接、不客套。不要開場寒暄、不要結尾總結「我做了什麼」、不要過度道歉。
-  observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
+  text: |-
+    直接、不客套:第一句就進正題;結尾停在結果、未完成項或待決事項,不回顧過程;
+      出錯時一句承認並修正。
+  observed: "unobserved: 採用 Claude 2026-10-17 更新，以明確的收尾與修正方式取代禁止式措辭，尚未驗證 Codex 行為"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-21
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: output.concise-default
@@ -136,9 +138,10 @@
   text: |-
     我偏好行動:需求夠清楚就直接執行,不要反覆確認;
       有不確定的假設就先做,並明講你假設了什麼。
-  observed: "unobserved: 從既有全域規則檔遷入，原始觀察未記錄"
+      任務有多個步驟或涉及多個檔案,本身不構成要求核准計畫的理由。
+  observed: "unobserved: 採用 Claude 2026-10-17 更新，避免單憑步驟或檔案數要求核准計畫；保留成本預檢與安全確認，尚未驗證 Codex 行為"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-21
   evidence: none
   revisit_when: 補記此規則因應的 model 行為，或此 surface 的預設 model 更換時
 - intent: scope.deliver-as-requested
@@ -342,12 +345,18 @@
   evidence: none
   revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
 - intent: retry.stop-after-two
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
+  status: experimental
+  text: |-
+    同一子任務連續失敗兩輪後,停止沿用原方法重試,先依 judgment 判定換路、升級或詢問我;
+      判定需要且環境支援能力調整時,再套用 dispatch skill。
+  observed: "unobserved: 採用 Claude 2026-10-17 更新，先判斷失敗原因與替代路線，再決定能力調整；僅停止原方法重試，避免誤讀為必須停工或派工，尚未驗證 Codex 行為"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-21
   evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  revisit_when: 補記 Codex 重試失敗後的換路行為，或依賴的 skill、可用的能力調整方式改變時
+  depends_on:
+    - skill: judgment
+    - skill: dispatch
 - intent: decisions.persist
   status: unimplemented
   observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
@@ -363,12 +372,15 @@
   evidence: none
   revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
 - intent: workflow.plan-first
-  status: unimplemented
-  observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
+  status: experimental
+  text: |-
+    需求已清楚,但實作方向有尚未定案、選錯需重做的重要取捨（架構、範圍、相容性）時,
+      先提出方案與推薦理由,取得核准後再實作。
+  observed: "unobserved: 採用 Claude 2026-10-17 的規劃觸發原則，以未定案的重要取捨為準，不綁定 plan mode，尚未驗證 Codex 行為"
   model: null
-  checked: 2026-10-09
+  checked: 2026-10-21
   evidence: none
-  revisit_when: 決定是否在 Codex/ChatGPT 共用檔補上（該檔也會被 ChatGPT 對話讀取，需確認對話情境是否適用）
+  revisit_when: 補記重要取捨的規劃觸發行為，尤其是否過度要求核准或漏掉選錯需重做的決策
 - intent: meta.skill-reference-hygiene
   status: unimplemented
   observed: "unobserved: 此規則只存在於 Claude Code 全域檔；Codex/ChatGPT 共用檔遷入時沒有對應規則"
