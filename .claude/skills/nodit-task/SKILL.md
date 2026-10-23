@@ -1,7 +1,7 @@
 ---
 name: nodit-task
 description: 在這個專案新增或更新工作項目（Task）時使用。依 Nodit 格式寫入 Task 檔案，連結所屬 Milestone、實作的 ADR 與依賴。
-# nodit-managed v2
+# nodit-managed v3
 ---
 
 # 新增或修改 Task（Nodit 格式）

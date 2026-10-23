@@ -8,7 +8,7 @@
 - `surfaces.yaml` 中的平台事實（長度上限、載入行為）必須附 `source` 與 `checked`。查不到就填 `unknown`，不要憑記憶填數值。
 - ADR 狀態成為 Accepted 時，或我核准一份具體 plan 後，執行 `npm run issue -- <decision|task> --key <ADR 的 id|task-YYYY-MM-DD-slug> --title "<標題>" --body-file <檔案>`，不需要先問我，完成後回報 issue 連結。decision 的 body 放 ADR 路徑與決策摘要；task 的 body 放 plan 摘要和 checklist；兩者都連到當下已存在的對方 issue。task key 在第一次核准時產生（同一天內 slug 不可重複），記在 plan 檔，重跑時沿用同一個 key。這是常設授權，只涵蓋在 `TinyWugaga/ai-dev-tools` 建 issue 並加入 Project 5，不包括建 label、編輯、關閉、reopen 或刪除。script 回傳非 0 時回報輸出，不要改用其他方式建立；原因排除後可以重跑同一指令。
 
-<!-- nodit:start v2 -->
+<!-- nodit:start v3 -->
 ## Nodit：決策與工作卡片格式
 
 這個專案用 Nodit 把 ADR、Milestone、Task 畫成關聯圖。在 `docs/decisions/`、`docs/milestones/`、`docs/tasks/` 新增或修改檔案時，遵守下列格式；不符合的檔案會在 Nodit 裡標成無效，而且不能透過 UI 編輯。
@@ -56,7 +56,17 @@ nodit new task "<標題>" [--milestone MS-01] [--implements ADR-001] [--depends 
 
 每個段落標題在同一份檔案只出現一次。其他自訂段落與 frontmatter 欄位會原樣保留。
 
+### Architecture 文件
+
+`docs/ARCHITECTURE.md` 由 Nodit 的 Architecture 頁渲染，頁面本身唯讀。新增或移除元件、調整資料夾結構、接受影響整體架構的 ADR 之後，同步更新這份文件：
+
+- 段落：`## 概觀`、`## 主要元件`、`## 專案結構`、`## 相關決策`。其他自訂段落會原樣顯示。
+- 圖用 `mermaid` 程式碼區塊。
+- `## 專案結構` 放一個 `nodit-tree` 程式碼區塊，它會顯示在 Structure 分頁：每行寫「路徑、兩個以上空白、說明」，縮排兩格表示子層，資料夾以 `/` 結尾。
+- 文中的 `ADR-001`、`MS-01`、`T-001` 這類代號會連到卡片，只寫已存在的代號。寫在 code span 或程式碼區塊裡的代號不會變成連結。
+- 文件描述現況；還沒定案的方向寫成 ADR。
+
 ### Claude Code skills
 
-建立卡片時使用 `/nodit-adr`、`/nodit-milestone`、`/nodit-task`。
+建立卡片時使用 `/nodit-adr`、`/nodit-milestone`、`/nodit-task`；撰寫或更新架構文件時使用 `/nodit-architecture`。
 <!-- nodit:end -->
