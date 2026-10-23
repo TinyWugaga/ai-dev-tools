@@ -33,7 +33,7 @@ ChatGPT Custom Instructions 與 `~/.codex/AGENTS.md` 雙向同步（2026-10-09 �
 2. **每個 surface 有一份完整、手寫的部署檔。** 措辭針對該 surface 的 model 與 harness 調整。不使用 build、concat 或 import 來組合內容。
 3. **intent 與 surface 的每一種組合都必須有明確狀態**，記錄在 rationale 中（見 ADR-0002）：
    - 已實作：`implemented` 或 `experimental`
-   - 明確不實作：`not-needed`
+   - 明確不實作：`not-needed`（驗證過不需要）或 `not-applicable`（結構上不適用，定義見 ADR-0002）
    - 尚未實作、也還沒決定：`unimplemented`。intent 適用於這個 surface，但部署檔裡目前沒有對應規則（2026-10-09 加入）。例如遷移時只有 Claude Code 全域檔有 dispatch、plan mode 等規則，Codex/ChatGPT 共用檔沒有。這類紀錄會出現在 lint 的待驗清單，直到補上規則或改成 `not-needed`。
 
    例外：`surfaces.yaml` 標為 `channel: none` 的 surface（目前是 `codex-cloud` 和 `chatgpt`）沒有載入管道，不列入這項完整性檢查。

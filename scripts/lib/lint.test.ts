@@ -115,6 +115,20 @@ describe("lint", () => {
     assert.ok(hasError(root, /not-needed 不可有 text/));
   });
 
+  it("accepts not-applicable with a reason and no observation fields", () => {
+    const na = { intent: "a", status: "not-applicable", reason: "tool missing", checked: "2026-10-17", revisit_when: "never" };
+    const root = fixture({ rules: "- rule B\n", records: [na, record("b", "rule B")] });
+    const result = lint(root);
+    assert.deepEqual(result.errors, []);
+    assert.ok(!result.pending.some((p) => p.includes(" / a:")));
+  });
+
+  it("requires a reason on not-applicable records", () => {
+    const na = { intent: "a", status: "not-applicable", checked: "2026-10-17", revisit_when: "never" };
+    const root = fixture({ rules: "- rule B\n", records: [na, record("b", "rule B")] });
+    assert.ok(hasError(root, /not-applicable 必須有 reason/));
+  });
+
   it("rejects unknown skills in depends_on", () => {
     const records = [record("a", "rule A", { depends_on: [{ skill: "x" }] }), record("b", "rule B")];
     assert.ok(hasError(fixture({ records }), /skill 未登記/));
