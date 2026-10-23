@@ -29,7 +29,7 @@ interface Config {
 type Kind = "decision" | "task";
 
 const KEY_PATTERNS: Record<Kind, RegExp> = {
-  decision: /^ADR-\d{4}$/,
+  decision: /^ADR-\d{3,}$/,
   task: /^task-\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/,
 };
 const USAGE = "用法：npm run issue -- <decision|task> --key <key> --title <標題> --body-file <檔案>";

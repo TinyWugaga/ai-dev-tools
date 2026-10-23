@@ -1,11 +1,15 @@
-# ADR-0002：Rationale 以逐字引用連結規則
+---
+id: ADR-0002
+type: adr
+title: Rationale 以逐字引用連結規則
+status: accepted
+date: 2026-10-04
+relates: [ADR-0001]
+---
 
-- 狀態：Accepted
-- 日期：2026-10-04
-- 來源：[ai-dev-tools-grill.md](ai-dev-tools-grill.md) #2、#7
-- 依賴：ADR-0001
+來源：[ai-dev-tools-grill.md](../records/ai-dev-tools-grill.md) #2、#7
 
-## 背景
+## Context
 
 本 project 的成功條件之一，是每條規則都能回答兩個問題：它因應哪一種 model 行為，以及是在哪個 model、哪一天觀察到的。這些 rationale 必須存放在部署檔之外，理由有二：
 
@@ -17,7 +21,7 @@
 - 不在部署檔中加入任何標記。手動貼上的 surface 會把標記一併貼上。
 - 不需要 build 步驟（ADR-0001）。
 
-## 決策
+## Decision
 
 1. 每個 surface 有一份 `rationale/<surface-id>.yaml`，每條規則一筆記錄：
 
@@ -55,7 +59,7 @@
 
 4. 依賴 skill 的記錄要填 `depends_on`，並記下蒐集 evidence 當時各 surface 上該 skill 的內容 hash。比對與降級規則見 ADR-0003。
 
-## 後果
+## Consequences
 
 **正面**
 - 部署檔保持乾淨，可以直接貼上，也不需要 build。

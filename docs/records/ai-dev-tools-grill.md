@@ -1,7 +1,7 @@
 # ai-dev-tools 決策集（grill 收斂版）
 
 日期：2026-10-04
-性質：pre-ADR 決策集。標 **[ADR]** 的項目已展開為正式 ADR：[0001](0001-intent-spec-and-per-surface-files.md)、[0002](0002-rationale-records-quote-rule-text.md)、[0003](0003-eval-gates-status-not-deploy.md)、[0004](0004-copy-deploy-with-drift-detection.md)。
+性質：pre-ADR 決策集。標 **[ADR]** 的項目已展開為正式 ADR：[0001](../decisions/ADR-0001-intent-spec-and-per-surface-files.md)、[0002](../decisions/ADR-0002-rationale-records-quote-rule-text.md)、[0003](../decisions/ADR-0003-eval-gates-status-not-deploy.md)、[0004](../decisions/ADR-0004-copy-deploy-with-drift-detection.md)。
 
 ## 範圍與非目標
 
@@ -266,7 +266,7 @@ docs/decisions/
 - eval 一律在暫存 workspace 執行，不得讀寫真實的 `~/.claude`、`~/.codex`。
 - 部署檔以和該 surface 相同的層級注入。
 - 無法同層注入時，run 紀錄標 `injection: proxy`；proxy evidence 要升級為 `implemented`，需另附至少 1 次手動測試佐證。
-- 具體做法已依 S1 結果寫入 [ADR-0003 §6](0003-eval-gates-status-not-deploy.md)。
+- 具體做法已依 S1 結果寫入 [ADR-0003 §6](../decisions/ADR-0003-eval-gates-status-not-deploy.md)。
 
 **4b 判定方式**
 - 優先使用 assertion（script 讀 output，exit 0/1）。

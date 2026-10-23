@@ -1,22 +1,25 @@
-# ADR-0005：決策與 plan 同步為 GitHub issue
+---
+id: ADR-0005
+type: adr
+title: 決策與 plan 同步為 GitHub issue
+status: accepted
+date: 2026-10-09
+relates: [ADR-0001, ADR-0002]
+---
 
-- 狀態：Accepted
-- 日期：2026-10-09
-- 依賴：ADR-0001、ADR-0002
-
-## 背景
+## Context
 
 決策目前只存在 `docs/decisions/`，任務規劃只存在對話或 plan 檔中，沒有一個地方可以追蹤「哪些決策已定、哪些任務在進行」。使用者要求在決策定案或規劃任務時，同步在 GitHub Project（[TinyWugaga/projects/5](https://github.com/users/TinyWugaga/projects/5)）新增 issue。
 
 建立 issue 屬於外部服務寫入。global 規則要求「未經明確要求不修改外部服務」，所以需要一份範圍明確的常設授權。
 
-## 決策
+## Decision
 
 ### 1. 觸發點
 
 | kind | 觸發 | key | body |
 |---|---|---|---|
-| `decision` | ADR 狀態成為 Accepted（包括新建時就是 Accepted 的 ADR）；Proposed 草稿不觸發 | `ADR-NNNN` | ADR 路徑與決策摘要 |
+| `decision` | ADR 狀態成為 Accepted（包括新建時就是 Accepted 的 ADR）；Proposed 草稿不觸發 | ADR frontmatter 的 `id`（`ADR-` 加 3 位以上數字；2026-10-23 依 ADR-006 放寬） | ADR 路徑與決策摘要 |
 | `task` | 使用者核准一份具體 plan；直接要求執行、沒有核准 plan 時不觸發 | `task-<核准日>-<slug>` | plan 摘要與 checklist |
 
 說明：
@@ -43,7 +46,7 @@ script 的關鍵設計：
 - **不重試 create**：create 失敗或結果不明時停止。重跑會先比對 marker，所以不會重複建立。
 - **lock**：`issue-sync.lock` 只保護共用同一 state 目錄的程序，lock 已存在時報錯退出、不動既有 lock。
 
-## 後果
+## Consequences
 
 **正面**
 - 每個 Accepted ADR 和每份核准的 plan，都在 Project 中有一張可追蹤的 issue。

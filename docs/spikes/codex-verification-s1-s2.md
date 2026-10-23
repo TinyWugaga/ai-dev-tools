@@ -1,7 +1,7 @@
 # Codex 查核清單與 Spike S1／S2 執行步驟
 
 建立日期：2026-10-04
-相關文件：[ADR-0002](../decisions/0002-rationale-records-quote-rule-text.md)、[ADR-0003](../decisions/0003-eval-gates-status-not-deploy.md)、[ADR-0004](../decisions/0004-copy-deploy-with-drift-detection.md)
+相關文件：[ADR-0002](../decisions/ADR-0002-rationale-records-quote-rule-text.md)、[ADR-0003](../decisions/ADR-0003-eval-gates-status-not-deploy.md)、[ADR-0004](../decisions/ADR-0004-copy-deploy-with-drift-detection.md)
 
 建議依「Codex 查核 → S1 → S2」的順序進行。C1～C5 和 C10 的結果，會直接決定 S1 Codex 端的指令怎麼寫。
 
