@@ -6,7 +6,7 @@ import { splitRuleBlocks } from "./blocks.ts";
 export type Kind = "chat" | "agentic";
 export type Scope = "global" | "repo";
 export type Channel = "copy" | "manual" | "in-repo" | "none";
-export type Status = "implemented" | "not-needed" | "experimental" | "stale" | "unimplemented";
+export type Status = "implemented" | "not-needed" | "not-applicable" | "experimental" | "stale" | "unimplemented";
 
 export interface Intent {
   id: string;
@@ -40,10 +40,11 @@ export interface RationaleRecord {
   intent: string;
   status: Status;
   text?: string;
-  observed: string;
+  observed?: string;
+  reason?: string;
   model?: string | null;
   checked: string;
-  evidence: string;
+  evidence?: string;
   revisit_when: string;
   depends_on?: { skill: string; pinned?: Record<string, string> }[];
 }
@@ -57,7 +58,7 @@ export interface LintResult {
 const KINDS = ["chat", "agentic"];
 const SCOPES = ["global", "repo"];
 const CHANNELS = ["copy", "manual", "in-repo", "none"];
-const STATUSES = ["implemented", "not-needed", "experimental", "stale", "unimplemented"];
+const STATUSES = ["implemented", "not-needed", "not-applicable", "experimental", "stale", "unimplemented"];
 const TENTATIVE = ["experimental", "unimplemented"];
 const UNITS = ["chars", "bytes", "lines", "unknown", "none"];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -171,6 +172,13 @@ function checkRecord(
   if (!intent.kinds.includes(surface.kind) || !intent.scopes.includes(surface.scope))
     err(`intent 不適用於此 surface（kind=${surface.kind}, scope=${surface.scope}）`);
   if (!STATUSES.includes(record.status)) return err(`status 無效：${record.status}`);
+  if (record.status === "not-applicable") {
+    if (!record.reason?.trim()) err("not-applicable 必須有 reason（ADR-0002）");
+    if (record.text) err("not-applicable 不可有 text（規則不應出現在部署檔）");
+    if (!record.revisit_when) err("缺少 revisit_when");
+    if (!DATE.test(String(record.checked ?? ""))) err("checked 必須是 YYYY-MM-DD");
+    return;
+  }
   for (const field of ["observed", "evidence", "revisit_when"] as const)
     if (!record[field]) err(`缺少 ${field}`);
   if (!DATE.test(String(record.checked ?? ""))) err("checked 必須是 YYYY-MM-DD");
@@ -188,7 +196,7 @@ function checkRecord(
     if (unobserved) err(`${record.status} 不可為 unobserved；unobserved 只能是 experimental 或 unimplemented（ADR-0002）`);
   }
   if (!record.model && !unobserved) err("缺少 model（觀察時的 model）");
-  if (hasEvidence && !existsSync(join(root, record.evidence))) err(`evidence 路徑不存在：${record.evidence}`);
+  if (hasEvidence && !existsSync(join(root, record.evidence!))) err(`evidence 路徑不存在：${record.evidence}`);
 
   for (const dep of record.depends_on ?? []) {
     if (!skills.has(dep.skill)) err(`depends_on 的 skill 未登記於 deps.yaml：${dep.skill}`);

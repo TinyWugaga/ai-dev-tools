@@ -329,7 +329,7 @@ check:
 **v1 完成的定義**
 - `lint`、`deploy`、`status`、`check-deps` 可運作。
 - S1 已完成。
-- 6 個有載入管道的 surface 都有部署檔（`codex-cloud` 為 `channel: none`，除外），且每個 intent 在每個 surface 都有狀態（`implemented`、`not-needed` 或 `experimental` 其中之一）。
+- 6 個有載入管道的 surface 都有部署檔（`codex-cloud` 為 `channel: none`，除外），且每個 intent 在每個 surface 都有狀態（`implemented`、`not-needed`、`not-applicable` 或 `experimental` 其中之一；`not-applicable` 的定義見 ADR-0002，2026-10-17 加入）。
 
 **遷移步驟**
 1. 達成上述定義後，才把現行的 claude.ai preferences 與 Claude Code／Codex global 檔遷入本 repo。
