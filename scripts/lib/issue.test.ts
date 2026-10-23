@@ -101,6 +101,14 @@ describe("syncIssue", () => {
     assert.equal(existsSync(lockPath), false);
   });
 
+  it("接受 Nodit 產生的三位數 ADR id", () => {
+    const { ctx, bodyFile, mapPath } = setup();
+    const s = stubGh([[]]);
+    const r = syncIssue(ctx, s.gh, argv(bodyFile, "ADR-006", "ADR-006 標題"));
+    assert.equal(r.code, 0, r.log.join("\n"));
+    assert.deepEqual(JSON.parse(readFileSync(mapPath, "utf8")), { "decision:ADR-006": issueUrl(100) });
+  });
+
   it("每個呼叫都明確指定目標", () => {
     const { ctx, bodyFile } = setup();
     const s = stubGh();
@@ -123,6 +131,7 @@ describe("syncIssue", () => {
     const { ctx, bodyFile } = setup();
     for (const args of [
       argv(bodyFile, "ADR-5"),
+      argv(bodyFile, "ADR-05"),
       argv(bodyFile, "task-2026-10-09-x", "t", "decision"),
       argv(bodyFile, "ADR-0005", " "),
       argv(join(bodyFile, "missing")),

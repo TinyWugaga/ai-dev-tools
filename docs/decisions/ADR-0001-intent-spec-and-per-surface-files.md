@@ -1,10 +1,14 @@
-# ADR-0001：Intent spec 與各 surface 獨立部署檔
+---
+id: ADR-0001
+type: adr
+title: Intent spec 與各 surface 獨立部署檔
+status: accepted
+date: 2026-10-04
+---
 
-- 狀態：Accepted
-- 日期：2026-10-04
-- 來源：[ai-dev-tools-grill.md](ai-dev-tools-grill.md) #1
+來源：[ai-dev-tools-grill.md](../records/ai-dev-tools-grill.md) #1
 
-## 背景
+## Context
 
 前一個 project 以 `AGENTS.md` 作為唯一真相來源，`CLAUDE.md` 只寫 `@AGENTS.md`，各平台共用同一份措辭。實際使用後發現，不同 model 對同一句指令的反應不同，但這個架構沒有地方可以針對個別 model 調整措辭，只能整份一起改。
 
@@ -21,7 +25,7 @@ ChatGPT Custom Instructions 與 `~/.codex/AGENTS.md` 雙向同步（2026-10-09 �
 
 各 surface 在載入方式、長度限制和內容需求上都不一樣。例如 chat 不需要 git 相關規則，而 chat 類 surface 有字數上限。
 
-## 決策
+## Decision
 
 1. **`intents.yaml` 是平台中立的意圖清單，不部署。** 每個 intent 包含：
    - `id`
@@ -43,7 +47,7 @@ ChatGPT Custom Instructions 與 `~/.codex/AGENTS.md` 雙向同步（2026-10-09 �
    不允許「未提及」。lint 負責檢查這項完整性。
 4. **平台的切分單位是 surface，不是 vendor。**
 
-## 後果
+## Consequences
 
 **正面**
 - 共用的是意圖，不是措辭。每個 model 的措辭可以各自調整，不會互相牽動。

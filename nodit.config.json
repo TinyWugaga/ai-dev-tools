@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "projectId": "3eb35689-3692-4853-aeab-8a584be8a745",
+  "paths": {
+    "adr": "docs/decisions",
+    "milestone": "docs/milestones",
+    "task": "docs/tasks",
+    "architecture": "docs/ARCHITECTURE.md",
+    "layout": ".nodit/layout.json"
+  },
+  "watch": {
+    "usePolling": false
+  },
+  "managed": {
+    "AGENTS.md#nodit": {
+      "template": 2,
+      "hash": "b7afb0eb4e56699d87d76b78e91e9230e6c30d90"
+    },
+    "CLAUDE.md#nodit": {
+      "template": 2,
+      "hash": "c1c4d1c0adf08ce1dc40ac186a9fd863398e4385"
+    },
+    ".claude/skills/nodit-adr/SKILL.md": {
+      "template": 2,
+      "hash": "10638f78c4553875f6a51b84aa6cc869f3f0df7c"
+    },
+    ".claude/skills/nodit-milestone/SKILL.md": {
+      "template": 2,
+      "hash": "f27a7cd41cc9a8a0ff874be6a1c649168b2164ec"
+    },
+    ".claude/skills/nodit-task/SKILL.md": {
+      "template": 2,
+      "hash": "b4e7717acf3403429e2095a7315079ef85ad5af9"
+    }
+  }
+}

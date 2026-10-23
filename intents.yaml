@@ -256,3 +256,8 @@
   goal: skill 以裸名稱引用、不寫死 namespace；路由表只列實際安裝的 skill，移除 skill 時同步刪除對應路由。
   kinds: [agentic]
   scopes: [global]
+
+- id: repo.nodit-card-format
+  goal: 在 docs/decisions、docs/milestones、docs/tasks 新增或修改卡片時，遵守 Nodit 的檔名、frontmatter、關聯與正文段落格式；新建卡片優先用 nodit new 配發編號。
+  kinds: [agentic]
+  scopes: [repo]

@@ -1,11 +1,15 @@
-# ADR-0004：以 copy 部署並偵測 drift
+---
+id: ADR-0004
+type: adr
+title: 以 copy 部署並偵測 drift
+status: accepted
+date: 2026-10-04
+relates: [ADR-0001]
+---
 
-- 狀態：Accepted
-- 日期：2026-10-04
-- 來源：[ai-dev-tools-grill.md](ai-dev-tools-grill.md) #5、#6
-- 依賴：ADR-0001
+來源：[ai-dev-tools-grill.md](../records/ai-dev-tools-grill.md) #5、#6
 
-## 背景
+## Context
 
 部署目標分成兩類。
 
@@ -21,7 +25,7 @@
 
 已查證的事實（[code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)，查閱於 2026-10-04）：在 Cowork session 中，如果 `~/.claude/CLAUDE.md` 本身是 symlink，Claude Code 會略過它，而且不會提示。
 
-## 決策
+## Decision
 
 ### 1. 自動目標用 copy，不用 symlink
 
@@ -79,7 +83,7 @@
 - `claude-code-global` 超過 200 行。這是官方建議的單檔上限。
 - 出現只適用於特定檔案類型的 intent。
 
-## 後果
+## Consequences
 
 **正面**
 - 每次部署都對應到一個 git revision，rationale 的 `checked` 欄位和 eval run 都能指出當時實際生效的版本。

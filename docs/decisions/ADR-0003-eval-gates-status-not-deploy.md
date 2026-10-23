@@ -1,17 +1,21 @@
-# ADR-0003：Eval 只把關狀態標籤，不阻擋部署
+---
+id: ADR-0003
+type: adr
+title: Eval 只把關狀態標籤，不阻擋部署
+status: accepted
+date: 2026-10-04
+relates: [ADR-0002]
+---
 
-- 狀態：Accepted
-- 日期：2026-10-04
-- 來源：[ai-dev-tools-grill.md](ai-dev-tools-grill.md) #3、#4、#7
-- 依賴：ADR-0002
+來源：[ai-dev-tools-grill.md](../records/ai-dev-tools-grill.md) #3、#4、#7
 
-## 背景
+## Context
 
 前一個 project 把 eval 當成部署關卡，而且 eval 範圍過大：每個 skill 要準備 4 類 fixture，並在每個平台各跑一次，另外還有一整套數值量測規範。結果是每新增或修改一條規則，都要付出整套測試的成本，迭代因此停擺。
 
 本 project 仍然需要「可重跑、可對照有規則與無規則」的紀錄，但驗證成本不能阻擋迭代。
 
-## 決策
+## Decision
 
 ### 1. 角色
 
@@ -111,7 +115,7 @@ check:
 - skill trigger eval
 - 舊 project 的數值量測規範體系
 
-## 後果
+## Consequences
 
 **正面**
 - 迭代速度不受 eval 成本影響。
