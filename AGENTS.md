@@ -30,7 +30,7 @@
 
 - 只要改動了 `intents.yaml`、`surfaces.yaml`、`deps.yaml`、`rationale/` 或任何部署檔，執行 `npm run lint`。指令回傳非 0 時，修正後重跑；仍失敗就回報錯誤內容，不要回報完成。
 
-<!-- nodit:start v2 -->
+<!-- nodit:start v3 -->
 ## Nodit：決策與工作卡片格式
 
 這個專案用 Nodit 把 ADR、Milestone、Task 畫成關聯圖。在 `docs/decisions/`、`docs/milestones/`、`docs/tasks/` 新增或修改檔案時，遵守下列格式；不符合的檔案會在 Nodit 裡標成無效，而且不能透過 UI 編輯。
@@ -77,4 +77,14 @@ nodit new task "<標題>" [--milestone MS-01] [--implements ADR-001] [--depends 
 - Task：`## Description`
 
 每個段落標題在同一份檔案只出現一次。其他自訂段落與 frontmatter 欄位會原樣保留。
+
+### Architecture 文件
+
+`docs/ARCHITECTURE.md` 由 Nodit 的 Architecture 頁渲染，頁面本身唯讀。新增或移除元件、調整資料夾結構、接受影響整體架構的 ADR 之後，同步更新這份文件：
+
+- 段落：`## 概觀`、`## 主要元件`、`## 專案結構`、`## 相關決策`。其他自訂段落會原樣顯示。
+- 圖用 `mermaid` 程式碼區塊。
+- `## 專案結構` 放一個 `nodit-tree` 程式碼區塊，它會顯示在 Structure 分頁：每行寫「路徑、兩個以上空白、說明」，縮排兩格表示子層，資料夾以 `/` 結尾。
+- 文中的 `ADR-001`、`MS-01`、`T-001` 這類代號會連到卡片，只寫已存在的代號。寫在 code span 或程式碼區塊裡的代號不會變成連結。
+- 文件描述現況；還沒定案的方向寫成 ADR。
 <!-- nodit:end -->
